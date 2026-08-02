@@ -1,6 +1,6 @@
 # AllValidations — Validações Brasileiras e Utilitários
 
-Classe principal de validações. Cobre documentos BR (CPF, CNPJ, CNH, RENAVAM, PIS/PASEP, Título de Eleitor), telefones, CEP, placas, EAN-13, cores hex, UUIDs, e-mails, URLs, hashes, arquivos e muito mais.
+Classe principal de validações. Cobre documentos BR (CPF, CNPJ, RG, CNH, RENAVAM, PIS/PASEP, Título de Eleitor e CNS), telefones, CEP, placas, EAN-13, cores hex, UUIDs, e-mails, URLs, hashes, arquivos e muito mais.
 
 ```dart
 import 'package:all_br_validations/all_br_validations.dart';
@@ -164,6 +164,9 @@ AllValidations.isRenavam('956065209');         // true  (9 dígitos aceitos)
 AllValidations.isPisPasep('12345678919');      // true  (11 dígitos)
 
 AllValidations.isTituloEleitor('006000610949'); // true (12 dígitos, estado 01–28)
+
+AllValidations.isCns('700616457492001');        // true (15 dígitos)
+AllValidations.isCns('000000000000000');        // false
 
 AllValidations.isValidBRZip('01310-100');      // true
 AllValidations.isValidBRZip('01310100');       // true  (sem hífen, 8 dígitos)
@@ -492,6 +495,7 @@ AllValidationsGetWeek.listDaysWeekAbvr;
 | `isRenavam(s)` | `bool` | 9–11 dígitos |
 | `isPisPasep(s)` | `bool` | 11 dígitos |
 | `isTituloEleitor(s)` | `bool` | 12 dígitos |
+| `isCns(s)` | `bool` | 15 dígitos, regra canônica do CNS |
 | `isValidBRZip(s)` | `bool` | CEP |
 | `isBrazilianCellPhone(s)` | `bool` | aceita +55 |
 | `isBrazilianLandline(s)` | `bool` | aceita +55 |
