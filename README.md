@@ -1,10 +1,10 @@
 # all_br_validations
 
+🇧🇷 Português | [🇺🇸 English](README.en.md)
+
 [![pub package](https://img.shields.io/pub/v/all_br_validations.svg)](https://pub.dev/packages/all_br_validations)
 [![CI](https://github.com/CriandoGames/all_br_validations/actions/workflows/ci.yml/badge.svg)](https://github.com/CriandoGames/all_br_validations/actions/workflows/ci.yml)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-
-🇧🇷 Português | [🇺🇸 English](README.en.md)
 
 Validações e formatação de dados brasileiros em Dart puro, com APIs diretas,
 fluentes e por contrato.

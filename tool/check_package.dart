@@ -56,6 +56,14 @@ void main() {
     }
   }
 
+  for (final readme in ['README.md', 'README.en.md']) {
+    final file = File('${root.path}${Platform.pathSeparator}$readme');
+    if (file.existsSync() &&
+        !file.readAsStringSync().contains('documentation/images/hero.png')) {
+      fail('$readme não referencia o hero padronizado.');
+    }
+  }
+
   for (final locale in ['pt-BR', 'en']) {
     final directory = Directory(
       '${root.path}${Platform.pathSeparator}doc'
