@@ -1,5 +1,5 @@
 name: all_br_validations
-description: Pure Dart Brazilian validations, BrZod schemas, contracts, formatters, geographic models, and validation results.
+description: Reusable pure Dart core for Brazilian validations, BrZod schemas, contracts, formatters, geographic models, and validation results.
 version: 1.0.0
 homepage: https://github.com/CriandoGames/all_br_validations
 repository: https://github.com/CriandoGames/all_br_validations
