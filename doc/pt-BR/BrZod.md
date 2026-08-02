@@ -31,7 +31,7 @@ O método `.build` retorna `String? Function(dynamic)` — compatível diretamen
 | `min(n, [msg])` | Mínimo de `n` caracteres |
 | `max(n, [msg])` | Máximo de `n` caracteres |
 | `email([msg])` | E-mail com regra compartilhada por `AllValidations` e `Contract` |
-| `phone([msg])` | Telefone BR — 8/9 dígitos sem DDD ou 10/11 com DDD; aceita máscaras `(DD) XXXX-XXXX` e `(DD) XXXXX-XXXX` |
+| `phone([msg])` | Telefone BR — 8/9 dígitos sem DDD ou 10/11 com DDD; aceita máscaras `(DD) XXXX-XXXX` e `(DD) XXXXX-XXXX`; rejeita código do país, pontuação arbitrária e espaços externos |
 | `equals(other, [msg])` | Valor deve ser igual a `other` — útil para confirmação de senha |
 | `type<T>([msg])` | Valor deve ser do tipo `T` (`String`, `int`, `double`, `bool`) |
 | `isDate([msg])` | Data válida — aceita `dd/MM/yyyy`, `yyyy-MM-dd` e ISO 8601 |

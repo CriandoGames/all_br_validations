@@ -4,7 +4,7 @@
 /// e eventual extração do módulo como pacote standalone.
 library;
 
-import '../../helpers/constants.dart';
+import '../../validator/internal/brazilian_phone_validator.dart';
 import '../../validator/internal/email_validator.dart';
 
 /// Retorna `true` se [value] não é nulo e não é string vazia.
@@ -43,26 +43,12 @@ bool isEmail(dynamic value) {
 /// (celular 9 dígitos ou fixo 8 dígitos, com ou sem DDD).
 bool isPhone(dynamic value) {
   final input = value?.toString() ?? '';
-  final acceptedFormat = RegExp(
-    r'^(?:\d{8,11}|\(\d{2}\) \d{4}-\d{4}|\(\d{2}\) \d{5}-\d{4})$',
+  return isValidBrazilianPhone(
+    input,
+    type: BrazilianPhoneType.any,
+    requireAreaCode: false,
+    allowCountryCode: false,
   );
-  if (!acceptedFormat.hasMatch(input)) return false;
-
-  final digits = input.replaceAll(RegExp(r'[() -]'), '');
-  switch (digits.length) {
-    case 8:
-      return RegExp(r'^[2-5]\d{7}$').hasMatch(digits);
-    case 9:
-      return RegExp(r'^9\d{8}$').hasMatch(digits);
-    case 10:
-      return Constants.ddds.contains(digits.substring(0, 2)) &&
-          RegExp(r'^[2-5]\d{7}$').hasMatch(digits.substring(2));
-    case 11:
-      return Constants.ddds.contains(digits.substring(0, 2)) &&
-          RegExp(r'^9\d{8}$').hasMatch(digits.substring(2));
-    default:
-      return false;
-  }
 }
 
 /// Retorna `true` se [value] == [other] após conversão para String.

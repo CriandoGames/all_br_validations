@@ -102,7 +102,10 @@ to a person. Do not put real personal documents in issues or tests.
 It validates format, not address existence.
 
 `isBrazilianCellPhone` requires DDD plus nine subscriber digits starting with
-9. It also accepts country code 55 when the total length proves it is present.
+9. It accepts digits or the documented `DD XXXXX-XXXX` and
+`(DD) XXXXX-XXXX` masks. It also accepts country code 55 in a digit-only value
+or as `+55` in the documented international forms. Arbitrary punctuation,
+extra text, and surrounding spaces are rejected before normalization.
 `isBrazilianLandline` requires DDD plus eight digits starting with 2–5 and
 applies the same country-code rule.
 

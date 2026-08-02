@@ -177,7 +177,12 @@ AllValidations.isValidBRZip('01.310-100');     // true  (com ponto, aceito)
 
 ## Telefones brasileiros
 
-`isBrazilianCellPhone` e `isBrazilianLandline` aceitam o prefixo `+55` ou `55` e o removem antes de validar. O DDD é validado contra a lista oficial de DDDs ativos.
+`isBrazilianCellPhone` e `isBrazilianLandline` validam o formato original antes
+de normalizar. Aceitam somente dígitos, `DD XXXXX-XXXX`, `(DD) XXXXX-XXXX` e as
+variações equivalentes de telefone fixo. O código do país pode ser informado
+como `+55` (junto aos dígitos ou no formato `+55 DD XXXXX-XXXX`) ou como `55`
+em uma sequência somente numérica. O DDD é validado contra a lista oficial de
+DDDs ativos.
 
 ```dart
 // Celular — 11 dígitos (com DDD), primeiro dígito após DDD deve ser 9
@@ -187,6 +192,8 @@ AllValidations.isBrazilianCellPhone('+5511999998877');  // true  (strip de +55)
 AllValidations.isBrazilianCellPhone('5511999998877');   // true  (strip de 55)
 AllValidations.isBrazilianCellPhone('(11) 3333-4444');  // false (fixo, não celular)
 AllValidations.isBrazilianCellPhone('(00) 99999-8877'); // false (DDD 00 inválido)
+AllValidations.isBrazilianCellPhone('11@99999#8877');   // false (pontuação arbitrária)
+AllValidations.isBrazilianCellPhone(' 11999998877');    // false (espaço externo)
 
 // Fixo — 10 dígitos (com DDD), primeiro dígito após DDD deve ser 2, 3, 4 ou 5
 AllValidations.isBrazilianLandline('(11) 3333-4444');  // true

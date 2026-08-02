@@ -121,19 +121,14 @@ class ContractValidations extends ValidationNotifiable {
   /// Notifica se [value] NÃO for maior que [comparer].
   ContractValidations isGreaterThan(
       dynamic value, dynamic comparer, String property, String message) {
-    if (_rejectMismatchedDateTimeTypes([value, comparer], property, message)) {
+    final comparison = _compareValues(value, comparer);
+    if (comparison == null) {
+      addNotifications(
+          ValidationNotification(property: property, message: message));
       return this;
     }
 
-    if (value is DateTime && comparer is DateTime) {
-      if (!value.isAfter(comparer)) {
-        addNotifications(
-            ValidationNotification(property: property, message: message));
-      }
-      return this;
-    }
-
-    if (value <= comparer) {
+    if (comparison <= 0) {
       addNotifications(
           ValidationNotification(property: property, message: message));
     }
@@ -144,19 +139,14 @@ class ContractValidations extends ValidationNotifiable {
   /// Notifica se [value] NÃO for maior ou igual a [comparer].
   ContractValidations isGreaterOrEqualsThan(
       dynamic value, dynamic comparer, String property, String message) {
-    if (_rejectMismatchedDateTimeTypes([value, comparer], property, message)) {
+    final comparison = _compareValues(value, comparer);
+    if (comparison == null) {
+      addNotifications(
+          ValidationNotification(property: property, message: message));
       return this;
     }
 
-    if (value is DateTime && comparer is DateTime) {
-      if (value.isBefore(comparer)) {
-        addNotifications(
-            ValidationNotification(property: property, message: message));
-      }
-      return this;
-    }
-
-    if (value < comparer) {
+    if (comparison < 0) {
       addNotifications(
           ValidationNotification(property: property, message: message));
     }
@@ -167,19 +157,14 @@ class ContractValidations extends ValidationNotifiable {
   /// Notifica se [value] NÃO for menor que [comparer].
   ContractValidations isLowerThan(
       dynamic value, dynamic comparer, String property, String message) {
-    if (_rejectMismatchedDateTimeTypes([value, comparer], property, message)) {
+    final comparison = _compareValues(value, comparer);
+    if (comparison == null) {
+      addNotifications(
+          ValidationNotification(property: property, message: message));
       return this;
     }
 
-    if (value is DateTime && comparer is DateTime) {
-      if (!value.isBefore(comparer)) {
-        addNotifications(
-            ValidationNotification(property: property, message: message));
-      }
-      return this;
-    }
-
-    if (value >= comparer) {
+    if (comparison >= 0) {
       addNotifications(
           ValidationNotification(property: property, message: message));
     }
@@ -190,19 +175,14 @@ class ContractValidations extends ValidationNotifiable {
   /// Notifica se [value] NÃO for menor ou igual a [comparer].
   ContractValidations isLowerOrEqualsThan(
       dynamic value, dynamic comparer, String property, String message) {
-    if (_rejectMismatchedDateTimeTypes([value, comparer], property, message)) {
+    final comparison = _compareValues(value, comparer);
+    if (comparison == null) {
+      addNotifications(
+          ValidationNotification(property: property, message: message));
       return this;
     }
 
-    if (value is DateTime && comparer is DateTime) {
-      if (value.isAfter(comparer)) {
-        addNotifications(
-            ValidationNotification(property: property, message: message));
-      }
-      return this;
-    }
-
-    if (value > comparer) {
+    if (comparison > 0) {
       addNotifications(
           ValidationNotification(property: property, message: message));
     }
@@ -259,27 +239,32 @@ class ContractValidations extends ValidationNotifiable {
   /// Notifica se [value] NÃO estiver entre [from] e [into] (inclusivo).
   ContractValidations isBetween(dynamic value, dynamic from, dynamic into,
       String property, String message) {
-    if (_rejectMismatchedDateTimeTypes(
-        [value, from, into], property, message)) {
+    final lowerComparison = _compareValues(value, from);
+    final upperComparison = _compareValues(value, into);
+    if (lowerComparison == null || upperComparison == null) {
+      addNotifications(
+          ValidationNotification(property: property, message: message));
       return this;
     }
 
-    if (value is DateTime && from is DateTime && into is DateTime) {
-      final isInRange = (value.isAfter(from) || value.isAtSameMomentAs(from)) &&
-          (value.isBefore(into) || value.isAtSameMomentAs(into));
-      if (!isInRange) {
-        addNotifications(
-            ValidationNotification(property: property, message: message));
-      }
-      return this;
-    }
-
-    if (value < from || value > into) {
+    if (lowerComparison < 0 || upperComparison > 0) {
       addNotifications(
           ValidationNotification(property: property, message: message));
     }
 
     return this;
+  }
+
+  int? _compareValues(dynamic left, dynamic right) {
+    if (left is num && right is num) {
+      return left.compareTo(right);
+    }
+
+    if (left is DateTime && right is DateTime) {
+      return left.compareTo(right);
+    }
+
+    return null;
   }
 
   bool _rejectMismatchedDateTimeTypes(

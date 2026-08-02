@@ -111,6 +111,8 @@ BrZod().phone().build('(11) 91234-5678'); // null
 
 `Contract.isPhoneNumber` delegates to direct mobile/landline rules that require
 DDD. This divergence is documented and covered by a dedicated regression test.
+All forms reject arbitrary punctuation, extra text, and surrounding spaces.
+`BrZod.phone` does not accept a country code.
 
 ## PasswordPolicy
 

@@ -73,7 +73,7 @@ values.
 
 ```yaml
 dependencies:
-  all_br_validations: ^1.0.0
+  all_br_validations: ^1.0.1
 ```
 
 ## Usage
@@ -91,6 +91,11 @@ final validMobile =
 final validPlate = AllValidations.isValidBrazilianLicensePlate('ABC1D23');
 final pix = AllValidations.validatePixKey('customer@example.com');
 ```
+
+Phones accept digits or the documented masks only; arbitrary punctuation,
+extra text, and surrounding spaces are rejected. Direct validation and
+`Contract` require DDD and accept `+55`. `BrZod.phone()` also accepts local
+8- or 9-digit phones, but it does not accept a country code.
 
 ### Complete registration with `BrZod`
 
@@ -152,6 +157,10 @@ contract
 print(contract.isValid);       // false
 print(contract.notifications); // both errors, without fail-fast
 ```
+
+Order comparators accept `num` with `num` (including `int` with `double`) and
+`DateTime` with `DateTime`. Incompatible types do not throw; they add exactly
+one notification to the contract.
 
 ### Formatting and alphanumeric CNPJ
 

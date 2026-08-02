@@ -60,8 +60,10 @@ The fluent base accumulates a notification when a rule fails and returns
 - `areEquals`, `areNotEquals`, `isBetween`;
 - `isBefore` for supported date/comparable values.
 
-Mismatched comparison types are rejected rather than silently coerced where the
-method's contract requires matching types.
+Order comparators support `num` with `num` (including `int` with `double`) and
+`DateTime` with `DateTime`. Null or incompatible values are neither coerced nor
+compared lexically: the rule adds one notification, returns the same contract,
+and does not throw `TypeError` or `NoSuchMethodError`.
 
 ### Presence and length
 

@@ -7,6 +7,7 @@ import '../cnpj/cnpj_alfanumerico.dart';
 import '../helpers/constants.dart';
 import '../models/brazilian_state.dart';
 import '../models/validation_error.dart';
+import 'internal/brazilian_phone_validator.dart';
 import 'internal/cns_validator.dart';
 import 'internal/email_validator.dart';
 import 'internal/url_validator.dart';
@@ -116,61 +117,20 @@ class AllValidations {
   static bool isEmail(String s) => isAllowedEmail(s);
 
   /// Checks if string is phone Cell Phone Brazilian.
-  static bool isBrazilianCellPhone(String s) {
-    // Remove caracteres não numéricos
-    if (s.isEmpty) return false;
-
-    String cleanedNumber = removeCharacters(s);
-
-    // Só remove o código de país (+55) quando o comprimento comprova que ele
-    // está presente (13 dígitos = 55 + DDD + 9 dígitos). Sem essa checagem de
-    // tamanho, números com DDD 55 (RS) eram cortados por engano.
-    if (cleanedNumber.length == 13 && cleanedNumber.startsWith('55')) {
-      cleanedNumber = cleanedNumber.substring(2);
-    }
-
-    // Verifica o tamanho do número (11 dígitos para celular)
-    if (cleanedNumber.length != 11) return false;
-
-    // Extrai o DDD e valida contra a lista de DDDs válidos
-    String ddd = cleanedNumber.substring(0, 2);
-    if (!isValidDDD(ddd)) return false;
-
-    // Verifica se o número começa com "9" (celular)
-    String celularInicio = cleanedNumber.substring(2, 3);
-    if (celularInicio != '9') return false;
-
-    // Valida o formato geral do número
-    return hasMatch(cleanedNumber, r'^[0-9]{11}$');
-  }
+  static bool isBrazilianCellPhone(String s) => isValidBrazilianPhone(
+        s,
+        type: BrazilianPhoneType.cellPhone,
+        requireAreaCode: true,
+        allowCountryCode: true,
+      );
 
   /// Valida se o número é um telefone fixo brasileiro com DDD.
-  static bool isBrazilianLandline(String s) {
-    if (s.isEmpty) return false;
-    // Remove caracteres não numéricos
-    String cleanedNumber = removeCharacters(s);
-
-    // Só remove o código de país (+55) quando o comprimento comprova que ele
-    // está presente (12 dígitos = 55 + DDD + 8 dígitos). Sem essa checagem de
-    // tamanho, números com DDD 55 (RS) eram cortados por engano.
-    if (cleanedNumber.length == 12 && cleanedNumber.startsWith('55')) {
-      cleanedNumber = cleanedNumber.substring(2);
-    }
-
-    // Verifica o tamanho do número (10 dígitos para fixo)
-    if (cleanedNumber.length != 10) return false;
-
-    // Extrai o DDD e valida contra a lista de DDDs válidos
-    String ddd = cleanedNumber.substring(0, 2);
-    if (!isValidDDD(ddd)) return false;
-
-    // Verifica se o número começa com um dígito válido para telefones fixos (2 a 5)
-    String fixoInicio = cleanedNumber.substring(2, 3);
-    if (!['2', '3', '4', '5'].contains(fixoInicio)) return false;
-
-    // Valida o formato geral do número
-    return hasMatch(cleanedNumber, r'^[0-9]{10}$');
-  }
+  static bool isBrazilianLandline(String s) => isValidBrazilianPhone(
+        s,
+        type: BrazilianPhoneType.landline,
+        requireAreaCode: true,
+        allowCountryCode: true,
+      );
 
   static bool isValidDDD(String ddd) {
     return Constants.ddds.contains(ddd);

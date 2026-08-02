@@ -56,6 +56,12 @@ pacote. Telefone preserva divergência histórica: `BrZod.phone()` aceita 8/9
 dígitos sem DDD, enquanto `Contract.isPhoneNumber()` exige celular ou fixo com
 DDD.
 
+Os comparadores ordenáveis aceitam `num` com `num` — incluindo `int` com
+`double` — e `DateTime` com `DateTime`. Valores nulos ou de tipos incompatíveis
+não são convertidos nem comparados lexicalmente: a regra adiciona uma única
+notificação, retorna o mesmo contrato e não lança `TypeError` ou
+`NoSuchMethodError`.
+
 ## Contract
 
 `Contract` adiciona `requires`, `join`, `merge`, `checkAll`, `checkAllStrict`,

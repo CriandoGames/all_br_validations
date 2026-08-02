@@ -72,7 +72,7 @@ o [catálogo do `BrZod`](doc/pt-BR/BrZod.md) e os
 
 ```yaml
 dependencies:
-  all_br_validations: ^1.0.0
+  all_br_validations: ^1.0.1
 ```
 
 ## Como usar
@@ -90,6 +90,11 @@ final celularValido =
 final placaValida = AllValidations.isValidBrazilianLicensePlate('ABC1D23');
 final pix = AllValidations.validatePixKey('cliente@example.com');
 ```
+
+Telefones aceitam somente dígitos ou as máscaras documentadas; pontuação
+arbitrária, texto adicional e espaços externos são rejeitados. As validações
+diretas e o `Contract` exigem DDD e aceitam `+55`. `BrZod.phone()` também aceita
+telefones locais de 8 ou 9 dígitos, mas não aceita código do país.
 
 ### Cadastro completo com `BrZod`
 
@@ -151,6 +156,10 @@ contract
 print(contract.isValid);       // false
 print(contract.notifications); // os dois erros, sem fail-fast
 ```
+
+Os comparadores ordenáveis aceitam `num` com `num` (inclusive `int` com
+`double`) e `DateTime` com `DateTime`. Tipos incompatíveis não lançam exceção:
+eles adicionam uma única notificação ao contrato.
 
 ### Formatação e CNPJ alfanumérico
 
