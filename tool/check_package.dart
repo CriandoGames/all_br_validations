@@ -40,7 +40,6 @@ void main() {
     'README.md',
     'README.en.md',
     'CHANGELOG.md',
-    'CHANGELOG.en.md',
     'CONTRIBUTING.md',
     'CONTRIBUTING.en.md',
     'SECURITY.md',

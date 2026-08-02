@@ -114,6 +114,10 @@ class Constants {
     'a'
   ];
 
+  // Lista oficial dos 67 DDDs atribuídos pela ANATEL. Precisa ficar em
+  // sincronia com o mapa em AllValidations.getStateByDDD — códigos como 23,
+  // 25, 26, 36, 52, 72, 76 e 78 nunca foram atribuídos e devem continuar
+  // fora desta lista.
   static const List<String> ddds = [
     '11',
     '12',
@@ -126,10 +130,7 @@ class Constants {
     '19',
     '21',
     '22',
-    '23',
     '24',
-    '25',
-    '26',
     '27',
     '28',
     '31',
@@ -137,7 +138,6 @@ class Constants {
     '33',
     '34',
     '35',
-    '36',
     '37',
     '38',
     '41',
@@ -150,7 +150,6 @@ class Constants {
     '48',
     '49',
     '51',
-    '52',
     '53',
     '54',
     '55',
@@ -164,13 +163,10 @@ class Constants {
     '68',
     '69',
     '71',
-    '72',
     '73',
     '74',
     '75',
-    '76',
     '77',
-    '78',
     '79',
     '81',
     '82',
