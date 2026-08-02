@@ -182,6 +182,35 @@ dart run example/all_br_validations_example.dart
 | Accumulate domain rules and violations | `Contract` |
 | Prepare data for display or persistence | `BrFormatter`, `BrData`, and `CnpjAlfanumerico` |
 
+### Where to use `BrZod`, `Result`, and `Contract`
+
+Use each API in the layer where it provides the most value:
+
+| API | Where to use it | Example |
+|---|---|---|
+| `BrZod` | Application input: forms, controllers, DTOs, and API payloads | Check formats and required fields, returning errors by field |
+| `Result` | Services and use cases that must represent success or failure without throwing expected exceptions | Validate and normalize a CPF, email, or PIX key before persistence |
+| `Contract` | Entities and business rules involving one or more values | Minimum age, accepted terms, and domain-defined limits |
+
+A practical registration flow is:
+
+```text
+Untrusted input → BrZod → Result with normalized data → Contract → persist
+```
+
+- `BrZod` answers: **do the received fields have valid formats?**
+- `Result` answers: **did the operation succeed or fail, and which safe value did it produce?**
+- `Contract` answers: **does the data comply with business rules?**
+
+They can be combined. Validate the payload with `BrZod`, normalize the CPF
+with `AllValidations.validateCPF()`, and enforce entity rules with `Contract`.
+Use `Contract.toResult()` when domain violations should join the same typed
+success-or-failure flow.
+
+Avoid using `Contract` only to check an isolated field when an `is*` method or
+`BrZod` solves the case. Likewise, do not use `BrZod` for rules that depend on
+entity state or business decisions.
+
 Focused entry points are also available:
 
 ```dart

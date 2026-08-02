@@ -53,6 +53,18 @@ void main() {
     );
   });
 
+  test('Contract integra as violações de domínio ao fluxo de Result', () {
+    final contract = example.validateBusinessRules(
+      age: 16,
+      acceptedTerms: false,
+    );
+    final result = contract.toResult('cadastro normalizado');
+
+    expect(result.isFailure, isTrue);
+    expect(result.failureValue, hasLength(2));
+    expect(result.failureValue.first.property, 'age');
+  });
+
   test('README documenta normalização, formatação e CNPJ alfanumérico', () {
     final cpf = AllValidations.validateCPF('529.982.247-25');
     final email = AllValidations.validateEmail('Ana.Souza@Example.com');

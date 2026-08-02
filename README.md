@@ -181,6 +181,35 @@ dart run example/all_br_validations_example.dart
 | Acumular regras e violações de domínio | `Contract` |
 | Preparar dados para exibição ou persistência | `BrFormatter`, `BrData` e `CnpjAlfanumerico` |
 
+### Onde usar `BrZod`, `Result` e `Contract`
+
+Use cada API na camada em que ela entrega mais valor:
+
+| API | Onde usar | Exemplo |
+|---|---|---|
+| `BrZod` | Entrada da aplicação: formulários, controllers, DTOs e payloads de API | Verificar formato, obrigatoriedade e devolver erros por campo |
+| `Result` | Serviços e casos de uso que precisam representar sucesso ou falha sem lançar exceções esperadas | Validar e normalizar CPF, e-mail ou chave PIX antes de persistir |
+| `Contract` | Entidades e regras de negócio que envolvem um ou mais valores | Idade mínima, aceite de termos e limites definidos pelo domínio |
+
+Uma separação prática para um cadastro:
+
+```text
+Entrada não confiável → BrZod → Result com dados normalizados → Contract → salvar
+```
+
+- `BrZod` responde: **os campos recebidos têm formato válido?**
+- `Result` responde: **a operação terminou em sucesso ou falha, e qual valor seguro ela produziu?**
+- `Contract` responde: **os dados respeitam as regras do negócio?**
+
+Eles podem ser usados juntos. Por exemplo, valide o payload com `BrZod`,
+normalize o CPF com `AllValidations.validateCPF()` e aplique as regras da
+entidade com `Contract`. Use `Contract.toResult()` quando quiser devolver as
+violações do domínio pelo mesmo fluxo tipado de sucesso e falha.
+
+Evite usar `Contract` apenas para verificar um campo isolado quando um método
+`is*` ou `BrZod` resolve o caso. Da mesma forma, não use `BrZod` para regras que
+dependem do estado da entidade ou de decisões do negócio.
+
 Barrels específicos também estão disponíveis:
 
 ```dart
