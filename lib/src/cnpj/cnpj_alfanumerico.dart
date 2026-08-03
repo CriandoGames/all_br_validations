@@ -31,9 +31,50 @@ class CnpjAlfanumerico {
   static final RegExp _dvRegex = RegExp(r'^\d{2}$');
   static final RegExp _allSameRegex = RegExp(r'^(.)\1{13}$');
 
+  static const List<String> _generatorChars = [
+    '0',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'N',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'X',
+    'Y',
+    'Z',
+  ];
+
   /// Todos os caracteres válidos nos primeiros 12 posições: 0–9 seguido de A–Z.
-  static final List<String> validChars = List.generate(10, (i) => '$i') +
-      List.generate(26, (i) => String.fromCharCode(i + 65));
+  ///
+  /// Mantida mutável por compatibilidade. O gerador usa um catálogo privado
+  /// para que alterações nesta lista não corrompam seu funcionamento.
+  static final List<String> validChars = List.of(_generatorChars);
 
   // ── Conversão de caractere → valor numérico ──────────────────────────────
 
@@ -132,7 +173,7 @@ class CnpjAlfanumerico {
     do {
       body = List.generate(
         12,
-        (_) => validChars[rand.nextInt(validChars.length)],
+        (_) => _generatorChars[rand.nextInt(_generatorChars.length)],
       ).join();
     } while (forceAlphanumeric && RegExp(r'^\d+$').hasMatch(body));
 

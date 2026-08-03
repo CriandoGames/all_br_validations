@@ -48,6 +48,9 @@ extension StringExtension on String? {
   /// `maxLength` caracteres seguidos de `'...'`.
   ///
   /// Retorna a própria string se for `null` ou já couber no limite.
+  /// A contagem usa pontos de código Unicode e não divide pares substitutos.
+  ///
+  /// Lança [RangeError] quando [maxLength] é negativo.
   ///
   /// ```dart
   /// 'Flutter é incrível'.truncate(7);  // 'Flutter...'
@@ -55,7 +58,13 @@ extension StringExtension on String? {
   /// null.truncate(5);                  // null
   /// ```
   String? truncate(int maxLength) {
-    if (this == null || this!.length <= maxLength) return this;
-    return '${this!.substring(0, maxLength)}...';
+    if (maxLength < 0) {
+      throw RangeError.range(maxLength, 0, null, 'maxLength');
+    }
+    if (this == null) return null;
+
+    final codePoints = this!.runes.toList(growable: false);
+    if (codePoints.length <= maxLength) return this;
+    return '${String.fromCharCodes(codePoints.take(maxLength))}...';
   }
 }

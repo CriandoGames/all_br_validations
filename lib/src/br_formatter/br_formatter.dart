@@ -15,7 +15,10 @@ class BrFormatter {
   // ── RegExps cacheadas ──────────────────────────────────────────────────────
 
   static final RegExp _nonDigit = RegExp(r'\D');
-  static final RegExp _currencySymbol = RegExp(r'[R\$\s]');
+  static final RegExp _currencySymbol = RegExp(r'^\s*R\$\s*');
+  static final RegExp _currencyValue = RegExp(
+    r'^-?(?:\d+|\d{1,3}(?:\.\d{3})+)(?:,\d+)?$',
+  );
 
   // ════════════════════════════════════════════════════════════════════════════
   // CPF
@@ -207,6 +210,9 @@ class BrFormatter {
   /// - [symbol]: se `true` (padrão), prefixa com `'R$ '`.
   /// - [decimals]: número de casas decimais (padrão `2`).
   ///
+  /// Lança [RangeError] se [decimals] estiver fora de 0 a 20 e
+  /// [ArgumentError] para valores não finitos ou com módulo a partir de `1e21`.
+  ///
   /// Exemplos:
   /// ```dart
   /// BrFormatter.formatCurrency(1234.5)                    // 'R$ 1.234,50'
@@ -219,6 +225,20 @@ class BrFormatter {
     bool symbol = true,
     int decimals = 2,
   }) {
+    if (decimals < 0 || decimals > 20) {
+      throw RangeError.range(decimals, 0, 20, 'decimals');
+    }
+    if (!value.isFinite) {
+      throw ArgumentError.value(value, 'value', 'O valor deve ser finito.');
+    }
+    if (value.abs() >= 1e21) {
+      throw ArgumentError.value(
+        value,
+        'value',
+        'O valor absoluto deve ser menor que 1e21.',
+      );
+    }
+
     final raw = value.toStringAsFixed(decimals);
     final parts = raw.split('.');
     final isNegative = parts[0].startsWith('-');
@@ -241,20 +261,26 @@ class BrFormatter {
   ///
   /// Exemplo: `'R$ 1.234,56'` → `'1.234,56'`.
   static String stripCurrencySymbol(String value) =>
-      value.replaceAll(_currencySymbol, '').trim();
+      value.replaceFirst(_currencySymbol, '').trim();
 
   /// Converte uma string no formato `'R$ 1.234,56'` para [double].
   ///
   /// Funciona com ou sem o símbolo `R$`.
   ///
-  /// Lança [FormatException] se a string não for convertível.
+  /// Lança [FormatException] se a entrada não seguir o formato monetário
+  /// brasileiro ou estiver fora do intervalo finito de [double].
   static double parseCurrency(String value) {
-    final stripped = value
-        .replaceAll(_currencySymbol, '')
-        .replaceAll('.', '')
-        .replaceAll(',', '.')
-        .trim();
-    return double.parse(stripped);
+    final stripped = stripCurrencySymbol(value);
+    if (!_currencyValue.hasMatch(stripped)) {
+      throw FormatException('Valor monetário inválido: $value');
+    }
+
+    final normalized = stripped.replaceAll('.', '').replaceAll(',', '.');
+    final parsed = double.parse(normalized);
+    if (!parsed.isFinite) {
+      throw FormatException('Valor monetário fora do intervalo: $value');
+    }
+    return parsed;
   }
 
   // ════════════════════════════════════════════════════════════════════════════

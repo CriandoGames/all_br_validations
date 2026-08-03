@@ -316,13 +316,13 @@ void main() {
   // ── BrZodResult ───────────────────────────────────────────────
   group('BrZodResult', () {
     test('construtor direto — isValid', () {
-      const r = BrZodResult(isValid: true, errors: {}, errorList: []);
+      final r = BrZodResult(isValid: true, errors: {}, errorList: []);
       expect(r.isValid, isTrue);
       expect(r.isNotValid, isFalse);
     });
 
     test('construtor direto — isNotValid', () {
-      const r = BrZodResult(
+      final r = BrZodResult(
         isValid: false,
         errors: {'field': 'erro'},
         errorList: ['field: erro'],
@@ -337,7 +337,7 @@ void main() {
   group('Barrel lib/br_zod.dart exporta corretamente', () {
     test('BrZod instanciável', () => expect(BrZod(), isNotNull));
     test('BrZodResult instanciável', () {
-      const r = BrZodResult(isValid: true, errors: {}, errorList: []);
+      final r = BrZodResult(isValid: true, errors: {}, errorList: []);
       expect(r, isNotNull);
     });
     test('PasswordPolicy acessível', () {

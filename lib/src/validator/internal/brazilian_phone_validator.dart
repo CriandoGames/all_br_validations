@@ -45,7 +45,7 @@ bool isValidBrazilianPhone(
   var subscriber = nationalNumber;
   if (hasAreaCode) {
     final areaCode = nationalNumber.substring(0, 2);
-    if (!Constants.ddds.contains(areaCode)) return false;
+    if (!Constants.dddToState.containsKey(areaCode)) return false;
     subscriber = nationalNumber.substring(2);
   }
 

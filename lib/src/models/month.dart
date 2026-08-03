@@ -2,9 +2,7 @@
 class AllValidationsGetMonth {
   /// Meses de janeiro a dezembro.
   ///
-  /// A lista permanece mutável por compatibilidade e deve ser tratada pelos
-  /// consumidores como somente leitura.
-  static List<String> listMonths = [
+  static const List<String> listMonths = [
     'Janeiro',
     'Fevereiro',
     'Março',
@@ -20,7 +18,7 @@ class AllValidationsGetMonth {
   ];
 
   /// Associa cada nome de mês ao número de 1 a 12.
-  static Map<String, int> mapMonths = const {
+  static const Map<String, int> mapMonths = {
     'Janeiro': 1,
     'Fevereiro': 2,
     'Março': 3,

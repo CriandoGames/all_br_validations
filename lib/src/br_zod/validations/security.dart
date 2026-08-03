@@ -76,7 +76,8 @@ class PasswordPolicy {
 /// minúscula, número e símbolo, máximo 99 e sem espaços).
 bool isPassword(dynamic value,
     {PasswordPolicy policy = PasswordPolicy.strong}) {
-  final s = value?.toString() ?? '';
+  if (value is! String) return false;
+  final s = value;
   if (s.length < policy.minLength) return false;
   if (policy.maxLength case final maxLength?) {
     if (s.length > maxLength) return false;

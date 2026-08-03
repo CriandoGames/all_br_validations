@@ -12,7 +12,7 @@ void main() {
     expect(source, isNot(contains('developer.log')));
   });
 
-  group('coleções mutáveis são apenas caracterizadas para versão futura', () {
+  group('compatibilidade das coleções públicas', () {
     test('CnpjAlfanumerico.validChars é mutável', () {
       final backup = List<String>.of(CnpjAlfanumerico.validChars);
       try {
@@ -23,14 +23,11 @@ void main() {
       }
     });
 
-    test('AllValidationsGetMonth.listMonths é mutável', () {
-      final backup = List<String>.of(AllValidationsGetMonth.listMonths);
-      try {
-        AllValidationsGetMonth.listMonths.clear();
-        expect(AllValidationsGetMonth.listMonths, isEmpty);
-      } finally {
-        AllValidationsGetMonth.listMonths.addAll(backup);
-      }
+    test('AllValidationsGetMonth.listMonths é somente leitura', () {
+      expect(
+        () => AllValidationsGetMonth.listMonths.clear(),
+        throwsUnsupportedError,
+      );
     });
 
     test('ValidationNotifiable.notifications expõe a lista interna', () {

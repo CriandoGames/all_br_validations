@@ -12,11 +12,15 @@ class BrData {
   /// Formata uma data → `'DD/MM/AAAA'`.
   ///
   /// Exemplo: `BrData.format(DateTime(2026, 7, 1))` → `'01/07/2026'`.
+  /// Lança [RangeError] quando o ano está fora de `0000` a `9999`.
   static String format(DateTime dt) =>
-      '${_pad(dt.day)}/${_pad(dt.month)}/${dt.year}';
+      '${_pad(dt.day)}/${_pad(dt.month)}/${_formatYear(dt.year)}';
 
   /// Formata uma data → `'MM/AAAA'`.
-  static String formatMonthYear(DateTime dt) => '${_pad(dt.month)}/${dt.year}';
+  ///
+  /// Lança [RangeError] quando o ano está fora de `0000` a `9999`.
+  static String formatMonthYear(DateTime dt) =>
+      '${_pad(dt.month)}/${_formatYear(dt.year)}';
 
   /// Formata uma data → `'DD/MM'`.
   static String formatDayMonth(DateTime dt) =>
@@ -102,6 +106,19 @@ class BrData {
   // ════════════════════════════════════════════════════════════════════════════
 
   static String _pad(int n) => n.toString().padLeft(2, '0');
+
+  static String _formatYear(int year) {
+    if (year < 0 || year > 9999) {
+      throw RangeError.range(
+        year,
+        0,
+        9999,
+        'year',
+        'O formato AAAA aceita apenas anos entre 0000 e 9999.',
+      );
+    }
+    return year.toString().padLeft(4, '0');
+  }
 
   static int _daysInMonth(int year, int month) {
     if (month == 2) {

@@ -148,84 +148,11 @@ class AllValidations {
       );
 
   /// Retorna se [ddd] é um dos 67 códigos brasileiros atribuídos.
-  static bool isValidDDD(String ddd) {
-    return Constants.ddds.contains(ddd);
-  }
+  static bool isValidDDD(String ddd) => Constants.dddToState.containsKey(ddd);
 
   /// Retorna o estado correspondente ao DDD informado.
-  static BrazilianState getStateByDDD(String ddd) {
-    const dddToStateMap = {
-      '11': BrazilianState.SP,
-      '12': BrazilianState.SP,
-      '13': BrazilianState.SP,
-      '14': BrazilianState.SP,
-      '15': BrazilianState.SP,
-      '16': BrazilianState.SP,
-      '17': BrazilianState.SP,
-      '18': BrazilianState.SP,
-      '19': BrazilianState.SP,
-      '21': BrazilianState.RJ,
-      '22': BrazilianState.RJ,
-      '24': BrazilianState.RJ,
-      '27': BrazilianState.ES,
-      '28': BrazilianState.ES,
-      '31': BrazilianState.MG,
-      '32': BrazilianState.MG,
-      '33': BrazilianState.MG,
-      '34': BrazilianState.MG,
-      '35': BrazilianState.MG,
-      '37': BrazilianState.MG,
-      '38': BrazilianState.MG,
-      '41': BrazilianState.PR,
-      '42': BrazilianState.PR,
-      '43': BrazilianState.PR,
-      '44': BrazilianState.PR,
-      '45': BrazilianState.PR,
-      '46': BrazilianState.PR,
-      '47': BrazilianState.SC,
-      '48': BrazilianState.SC,
-      '49': BrazilianState.SC,
-      '51': BrazilianState.RS,
-      '53': BrazilianState.RS,
-      '54': BrazilianState.RS,
-      '55': BrazilianState.RS,
-      '61': BrazilianState.DF,
-      '62': BrazilianState.GO,
-      '64': BrazilianState.GO,
-      '63': BrazilianState.TO,
-      '65': BrazilianState.MT,
-      '66': BrazilianState.MT,
-      '67': BrazilianState.MS,
-      '68': BrazilianState.AC,
-      '69': BrazilianState.RO,
-      '71': BrazilianState.BA,
-      '73': BrazilianState.BA,
-      '74': BrazilianState.BA,
-      '75': BrazilianState.BA,
-      '77': BrazilianState.BA,
-      '79': BrazilianState.SE,
-      '81': BrazilianState.PE,
-      '87': BrazilianState.PE,
-      '82': BrazilianState.AL,
-      '83': BrazilianState.PB,
-      '84': BrazilianState.RN,
-      '85': BrazilianState.CE,
-      '88': BrazilianState.CE,
-      '86': BrazilianState.PI,
-      '89': BrazilianState.PI,
-      '91': BrazilianState.PA,
-      '93': BrazilianState.PA,
-      '94': BrazilianState.PA,
-      '92': BrazilianState.AM,
-      '97': BrazilianState.AM,
-      '95': BrazilianState.RR,
-      '96': BrazilianState.AP,
-      '98': BrazilianState.MA,
-      '99': BrazilianState.MA
-    };
-
-    return dddToStateMap[ddd] ?? BrazilianState.Unknown;
-  }
+  static BrazilianState getStateByDDD(String ddd) =>
+      Constants.dddToState[ddd] ?? BrazilianState.Unknown;
 
   /// Checks if string is a real DateTime in the documented integral format.
   static bool isDateTime(String s) {

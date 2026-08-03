@@ -10,7 +10,7 @@ class AllValidationsGetWeek {
   ];
 
   /// Numeração dos dias úteis, com segunda-feira igual a 1.
-  static Map<String, int> mapWorkDays = const {
+  static const Map<String, int> mapWorkDays = {
     'Segunda-Feira': 1,
     'Terça-Feira': 2,
     'Quarta-Feira': 3,
@@ -20,8 +20,7 @@ class AllValidationsGetWeek {
 
   /// Formas abreviadas dos dias úteis, de segunda a sexta.
   ///
-  /// A lista permanece mutável por compatibilidade.
-  static List<String> listWorkDaysAbvr = [
+  static const List<String> listWorkDaysAbvr = [
     'Segunda',
     'Terça',
     'Quarta',
@@ -30,7 +29,7 @@ class AllValidationsGetWeek {
   ];
 
   /// Numeração das formas abreviadas de dias úteis.
-  static Map<String, int> mapWorkDaysAbvr = const {
+  static const Map<String, int> mapWorkDaysAbvr = {
     'Segunda': 1,
     'Terça': 2,
     'Quarta': 3,
@@ -61,7 +60,7 @@ class AllValidationsGetWeek {
   ];
 
   /// Numeração da semana por extenso iniciada no domingo.
-  static Map<String, int> mapDaysWeekOrdered = const {
+  static const Map<String, int> mapDaysWeekOrdered = {
     'Domingo': 1,
     'Segunda-Feira': 2,
     'Terça-Feira': 3,
@@ -73,9 +72,8 @@ class AllValidationsGetWeek {
 
   /// Semana abreviada iniciada no domingo.
   ///
-  /// Diferentemente de [listDaysWeek], esta lista segue a ordenação dominical
-  /// e permanece mutável por compatibilidade.
-  static List<String> listDaysWeekOrdered = [
+  /// Diferentemente de [listDaysWeek], esta lista segue a ordenação dominical.
+  static const List<String> listDaysWeekOrdered = [
     'Domingo',
     'Segunda',
     'Terça',
@@ -86,7 +84,7 @@ class AllValidationsGetWeek {
   ];
 
   /// Numeração da semana abreviada iniciada no domingo.
-  static Map<String, int> mapDaysWeekOrderAbvr = const {
+  static const Map<String, int> mapDaysWeekOrderAbvr = {
     'Domingo': 1,
     'Segunda': 2,
     'Terça': 3,
