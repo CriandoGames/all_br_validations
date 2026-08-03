@@ -436,7 +436,7 @@ AllValidations.validatePixKey('529.982.247-25');              // Success(PixKeyT
 AllValidations.validatePixKey('11.222.333/0001-81');          // Success(PixKeyType.cnpj)
 AllValidations.validatePixKey('12ABC34501DE35');              // Success(PixKeyType.cnpj)
 AllValidations.validatePixKey('+5511912345678');              // Success(PixKeyType.phone)
-AllValidations.validatePixKey('user@example.com');            // Success(PixKeyType.email)
+AllValidations.validatePixKey('pix!tag@bcb.gov.br');           // Success(PixKeyType.email)
 AllValidations.validatePixKey('123e4567-e89b-4d3a-a456-426614174000'); // Success(PixKeyType.random)
 AllValidations.validatePixKey('12345678901');                 // Failure(...)
 ```
@@ -448,28 +448,36 @@ Regras de identificação por tipo:
 | `PixKeyType.cpf` | CPF válido (com ou sem máscara) |
 | `PixKeyType.cnpj` | CNPJ numérico válido (com ou sem máscara) ou alfanumérico válido sem máscara |
 | `PixKeyType.phone` | `+55` + DDD (2 dígitos) + `9` + 8 dígitos → `+5511912345678` |
-| `PixKeyType.email` | E-mail válido sem dígitos puros |
-| `PixKeyType.random` | UUID RFC 4122 gerado pelo DICT |
+| `PixKeyType.email` | Expressão do DICT, somente minúsculas e até 77 caracteres |
+| `PixKeyType.random` | EVP hexadecimal minúscula no formato `8-4-4-4-12`, sem restrição de versão ou variante UUID |
 
 ---
 
 ## Listas utilitárias
 
 ```dart
-AllValidationsGetMonth.list;
+AllValidationsGetMonth.listMonths;
 // ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
 //  'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
 
-AllValidationsGetRegions.list;
-// ['Norte', 'Nordeste', 'Centro-Oeste', 'Sudeste', 'Sul']
+AllValidationsGetRegions.listRegions;
+// ['Centro-Oeste', 'Nordeste', 'Norte', 'Sudeste', 'Sul']
 
-AllValidationsGetStates.list;
+AllValidationsGetStates.listStates;
+// ['Acre', 'Alagoas', 'Amapá', 'Amazonas', 'Bahia', 'Ceará',
+//  'Distrito Federal', 'Espírito Santo', 'Goiás', 'Maranhão',
+//  'Mato Grosso', 'Mato Grosso do Sul', 'Minas Gerais', 'Pará',
+//  'Paraíba', 'Paraná', 'Pernambuco', 'Piauí', 'Rio de Janeiro',
+//  'Rio Grande do Norte', 'Rio Grande do Sul', 'Rondônia', 'Roraima',
+//  'Santa Catarina', 'São Paulo', 'Sergipe', 'Tocantins']
+
+AllValidationsGetStates.listStatesAcronym;
 // ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
 //  'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN',
 //  'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']
 
 AllValidationsGetWeek.listDaysWeekAbvr;
-// ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom']
+// ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo']
 ```
 
 ---

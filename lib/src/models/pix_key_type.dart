@@ -12,6 +12,6 @@ enum PixKeyType {
   /// Endereço de e-mail.
   email,
 
-  /// Chave aleatória no formato UUID RFC 4122 gerado pelo DICT.
+  /// EVP hexadecimal no formato agrupado `8-4-4-4-12` gerado pelo DICT.
   random,
 }

@@ -182,11 +182,15 @@ void main() {
   });
 
   group('AllValidations.validatePixKey', () {
-    group('telefone valida o DDD', () {
+    group('telefone segue o formato PIX', () {
       for (final invalid in [
         '+5500912345678',
         '+5510912345678',
         '+5523912345678',
+        '(21) 99999-8877',
+        '21999998877',
+        '5521999998877',
+        '+55 21 99999-8877',
       ]) {
         test('rejeita $invalid', () {
           expect(
@@ -204,6 +208,37 @@ void main() {
       });
     });
 
+    group('e-mail segue o formato do DICT', () {
+      test('rejeita letras maiúsculas', () {
+        expect(
+          AllValidations.validatePixKey('PIX@EXAMPLE.COM').isFailure,
+          isTrue,
+        );
+      });
+
+      test('aceita caracteres permitidos pela expressão do DICT', () {
+        final result = AllValidations.validatePixKey('pix!tag@bcb.gov.br');
+
+        expect(result.isSuccess, isTrue);
+        expect(result.successValue, PixKeyType.email);
+      });
+
+      test('aceita e-mail com exatamente 77 caracteres', () {
+        final key = '${List.filled(66, 'a').join()}@bcb.gov.br';
+
+        expect(key.length, 77);
+        expect(
+            AllValidations.validatePixKey(key).successValue, PixKeyType.email);
+      });
+
+      test('rejeita e-mail com mais de 77 caracteres', () {
+        final key = '${List.filled(67, 'a').join()}@bcb.gov.br';
+
+        expect(key.length, 78);
+        expect(AllValidations.validatePixKey(key).isFailure, isTrue);
+      });
+    });
+
     test('aceita chave aleatória conforme exemplo do manual do Pix', () {
       final result = AllValidations.validatePixKey(
         '123e4567-e12b-12d1-a456-426655440000',
@@ -213,12 +248,22 @@ void main() {
       expect(result.successValue, PixKeyType.random);
     });
 
-    test('rejeita UUID sem versão RFC 4122', () {
+    test('EVP exige apenas o formato hexadecimal agrupado do DICT', () {
       final result = AllValidations.validatePixKey(
-        '123e4567-e12b-02d1-a456-426655440000',
+        '123e4567-e12b-02d1-0456-426655440000',
       );
 
-      expect(result.isFailure, isTrue);
+      expect(result.isSuccess, isTrue);
+      expect(result.successValue, PixKeyType.random);
+    });
+
+    test('EVP rejeita hexadecimal em maiúsculas', () {
+      expect(
+        AllValidations.validatePixKey(
+          '123E4567-E12B-12D1-A456-426655440000',
+        ).isFailure,
+        isTrue,
+      );
     });
   });
 

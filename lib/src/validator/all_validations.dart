@@ -11,6 +11,7 @@ import 'internal/brazilian_phone_validator.dart';
 import 'internal/cns_validator.dart';
 import 'internal/email_validator.dart';
 import 'internal/ip_validator.dart';
+import 'internal/pix_key_validator.dart';
 import 'internal/url_validator.dart';
 import 'internal/uuid_validator.dart';
 
@@ -915,6 +916,9 @@ class AllValidations {
   /// [PixKeyType.cnpj], [PixKeyType.phone], [PixKeyType.email] ou
   /// [PixKeyType.random].
   ///
+  /// Telefone, e-mail e EVP seguem formatos específicos do DICT e não os
+  /// validadores genéricos equivalentes do pacote.
+  ///
   /// ```dart
   /// AllValidations.validatePixKey('+5511912345678').fold(
   ///   (err)  => print('Chave inválida'),
@@ -926,23 +930,15 @@ class AllValidations {
     String property = 'chavePix',
     String message = 'Chave PIX inválida.',
   }) {
-    final onlyDigits =
-        RegExp(r'^\d+$').hasMatch(key.replaceAll(RegExp(r'[\s.\-]'), ''));
-
     if (isCpf(key)) return Result.success(PixKeyType.cpf);
     final unmaskedAlphanumericCnpj =
         RegExp(r'^[A-Z0-9]{14}$', caseSensitive: false).hasMatch(key);
     if (isCnpj(key) || (unmaskedAlphanumericCnpj && isCnpjAlphanumeric(key))) {
       return Result.success(PixKeyType.cnpj);
     }
-    if (isBrazilianCellPhone(key)) {
-      return Result.success(PixKeyType.phone);
-    }
-    if (!onlyDigits && isEmail(key)) return Result.success(PixKeyType.email);
-    if (!onlyDigits &&
-        isValidUuid(key, allowedVersions: const {1, 2, 3, 4, 5})) {
-      return Result.success(PixKeyType.random);
-    }
+    if (isValidPixPhone(key)) return Result.success(PixKeyType.phone);
+    if (isValidPixEmail(key)) return Result.success(PixKeyType.email);
+    if (isValidPixEvp(key)) return Result.success(PixKeyType.random);
 
     return Result.failure(
         ValidationError(property: property, message: message));

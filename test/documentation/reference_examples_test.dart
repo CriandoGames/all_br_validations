@@ -94,4 +94,33 @@ void main() {
     expect(enabled.isTrue, isFalse);
     expect(enabled.isFalse, isFalse);
   });
+
+  test('documenta os nomes reais dos catálogos públicos', () {
+    expect(AllValidationsGetMonth.listMonths.first, 'Janeiro');
+    expect(AllValidationsGetRegions.listRegions.first, 'Centro-Oeste');
+    expect(AllValidationsGetStates.listStates.first, 'Acre');
+    expect(AllValidationsGetStates.listStatesAcronym.first, 'AC');
+    expect(AllValidationsGetWeek.listDaysWeekAbvr.take(3), [
+      'Segunda',
+      'Terça',
+      'Quarta',
+    ]);
+  });
+
+  test('documenta os formatos específicos de chave PIX do DICT', () {
+    expect(
+      AllValidations.validatePixKey('+5521999998877').successValue,
+      PixKeyType.phone,
+    );
+    expect(
+      AllValidations.validatePixKey('pix!tag@bcb.gov.br').successValue,
+      PixKeyType.email,
+    );
+    expect(
+      AllValidations.validatePixKey(
+        '123e4567-e12b-02d1-0456-426655440000',
+      ).successValue,
+      PixKeyType.random,
+    );
+  });
 }

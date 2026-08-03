@@ -201,8 +201,10 @@ parameter.
 ## PIX keys
 
 PIX validation classifies supported keys by their documented shape (CPF,
-numeric or alphanumeric CNPJ, phone, email, or EVP/UUID) and reuses canonical
-rules where applicable. Alphanumeric CNPJ is accepted unmasked, matching the
+numeric or alphanumeric CNPJ, phone, email, or EVP). Phone, email, and EVP use
+the DICT-specific formats: Brazilian E.164 without a mask, lowercase email up
+to 77 characters, and lowercase hexadecimal EVP grouped as `8-4-4-4-12`.
+Alphanumeric CNPJ is accepted unmasked, matching the
 DICT key shape.
 It does not contact a payment provider and cannot prove registration or
 ownership.
