@@ -39,10 +39,10 @@ class BrData {
   /// Lança [FormatException] se a string não estiver no formato esperado
   /// ou representar uma data inválida (ex.: `'31/02/2024'`).
   static DateTime parse(String date) {
-    final parts = date.split('/');
-    if (parts.length != 3) {
+    if (!RegExp(r'^\d{2}/\d{2}/\d{4}$').hasMatch(date)) {
       throw FormatException('Data inválida (esperado DD/MM/AAAA): $date');
     }
+    final parts = date.split('/');
     final day = int.parse(parts[0]);
     final month = int.parse(parts[1]);
     final year = int.parse(parts[2]);
@@ -54,22 +54,24 @@ class BrData {
   ///
   /// Lança [FormatException] se a string estiver fora do formato esperado.
   static DateTime parseWithTime(String dateTime) {
-    final pieces = dateTime.split(' ');
-    if (pieces.length != 2) {
+    if (!RegExp(r'^\d{2}/\d{2}/\d{4} \d{2}:\d{2}$').hasMatch(dateTime)) {
       throw FormatException(
           'Data/hora inválida (esperado DD/MM/AAAA HH:MM): $dateTime');
     }
+    final pieces = dateTime.split(' ');
     final dt = parse(pieces[0]);
     final timeParts = pieces[1].split(':');
-    if (timeParts.length < 2) {
+    final hour = int.parse(timeParts[0]);
+    final minute = int.parse(timeParts[1]);
+    if (hour > 23 || minute > 59) {
       throw FormatException('Hora inválida: ${pieces[1]}');
     }
     return DateTime(
       dt.year,
       dt.month,
       dt.day,
-      int.parse(timeParts[0]),
-      int.parse(timeParts[1]),
+      hour,
+      minute,
     );
   }
 
@@ -82,8 +84,8 @@ class BrData {
   /// Retorna `false` para datas inexistentes (ex.: `'31/02/2024'`).
   static bool validate(String date) {
     try {
+      if (!RegExp(r'^\d{2}/\d{2}/\d{4}$').hasMatch(date)) return false;
       final parts = date.split('/');
-      if (parts.length != 3) return false;
       final day = int.parse(parts[0]);
       final month = int.parse(parts[1]);
       final year = int.parse(parts[2]);

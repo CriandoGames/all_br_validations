@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'internal/cpf_generator.dart';
+
 /// Utilitários de formatação para dados tipicamente brasileiros.
 ///
 /// Cobre documentos (CPF, CNPJ, CEP), contatos (telefone, DDD),
@@ -12,7 +14,6 @@ class BrFormatter {
   // ── RegExps cacheadas ──────────────────────────────────────────────────────
 
   static final RegExp _nonDigit = RegExp(r'\D');
-  static final RegExp _allSameCpf = RegExp(r'^(.)\1{10}$');
   static final RegExp _currencySymbol = RegExp(r'[R\$\s]');
 
   // ════════════════════════════════════════════════════════════════════════════
@@ -43,12 +44,7 @@ class BrFormatter {
   /// - [formatted]: se `true`, retorna no padrão `'999.999.999-99'`.
   static String generateCpf({bool formatted = false}) {
     final rand = Random.secure();
-    List<int> d;
-
-    // Rejeita sequências com 11 dígitos iguais (ex.: 111.111.111-11)
-    do {
-      d = List.generate(9, (_) => rand.nextInt(10));
-    } while (_allSameCpf.hasMatch(d.join()));
+    final d = generateCpfBase(rand);
 
     // Primeiro DV — pesos 10 a 2
     int sum = 0;
@@ -162,8 +158,14 @@ class BrFormatter {
   ///
   /// Retorna os 2 primeiros dígitos, ou `''` se insuficientes.
   static String extractDdd(String phone) {
-    final s = stripPhone(phone);
-    return s.length >= 2 ? s.substring(0, 2) : '';
+    var digits = stripPhone(phone);
+    if ((digits.length == 12 || digits.length == 13) &&
+        digits.startsWith('55')) {
+      digits = digits.substring(2);
+    }
+    return digits.length == 10 || digits.length == 11
+        ? digits.substring(0, 2)
+        : '';
   }
 
   /// Formata um telefone com 10 ou 11 dígitos.

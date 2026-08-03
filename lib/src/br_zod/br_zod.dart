@@ -54,6 +54,9 @@ class BrZod {
 
   ILocaleBrZod get _l => locale ?? defaultLocale;
 
+  /// Cria um schema encadeável com [locale] opcional.
+  ///
+  /// Quando omitido, usa [defaultLocale].
   BrZod({this.locale});
 
   // ── Core ────────────────────────────────────────────────────
@@ -123,9 +126,11 @@ class BrZod {
         (v) => g.isEquals(v, other) ? null : message ?? _l.equals,
       );
 
-  /// Valor deve ser do tipo [T].
+  /// Valor deve ser do tipo [T] ou ser convertível para um tipo básico.
   ///
-  /// Suporta `String`, `int`, `double`, `bool` e qualquer outro tipo via `is`.
+  /// Para `int`, `double` e `bool`, strings convertíveis são aceitas por
+  /// compatibilidade histórica (por exemplo, `'123'` para `int`). `String`
+  /// e tipos personalizados usam verificação estrita com `is T`.
   /// ```dart
   /// BrZod().required().type<int>().build
   /// ```
@@ -343,6 +348,11 @@ class BrZod {
           // decodificado como Map<dynamic, dynamic>) — normaliza as chaves
           // em vez de tratar como incompatível.
           nestedData = rawValue.map((k, v) => MapEntry(k.toString(), v));
+        } else if (rawValue != null) {
+          const message = 'O valor deve ser um objeto.';
+          errors[key] = message;
+          errorList.add('$fullKey: $message');
+          return;
         } else {
           nestedData = <String, dynamic>{};
         }

@@ -163,7 +163,7 @@ void main() {
     expect(sut, true);
 
     sut = AllValidations.isVideo('a.srt');
-    expect(sut, true);
+    expect(sut, false);
 
     sut = AllValidations.isVideo('a.amc');
     expect(sut, true);

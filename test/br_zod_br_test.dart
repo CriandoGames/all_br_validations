@@ -75,7 +75,8 @@ void main() {
     test('formato antigo sem hífen',
         () => expect(br.isPlaca('ABC1234'), isTrue));
     test('Mercosul ABC1D23', () => expect(br.isPlaca('ABC1D23'), isTrue));
-    test('minúscula inválida', () => expect(br.isPlaca('abc1234'), isFalse));
+    test(
+        'minúscula é normalizada', () => expect(br.isPlaca('abc1234'), isTrue));
     test('formato errado', () => expect(br.isPlaca('AB-1234'), isFalse));
     test('null', () => expect(br.isPlaca(null), isFalse));
   });

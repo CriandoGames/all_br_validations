@@ -5,17 +5,31 @@
 library;
 
 import '../../validator/internal/url_validator.dart';
+import '../../validator/internal/ip_validator.dart';
 
 // ── Senha ────────────────────────────────────────────────────
 
 /// Configuração de política de senha para [isPassword].
 class PasswordPolicy {
+  /// Quantidade mínima de caracteres.
   final int minLength;
+
+  /// Exige ao menos uma letra ASCII maiúscula.
   final bool requireUppercase;
+
+  /// Exige ao menos uma letra ASCII minúscula.
   final bool requireLowercase;
+
+  /// Exige ao menos um dígito ASCII.
   final bool requireNumber;
+
+  /// Exige ao menos um símbolo da lista reconhecida por [isPassword].
   final bool requireSpecial;
 
+  /// Cria uma política configurável.
+  ///
+  /// Por padrão equivale a [strong]. A política não impõe tamanho máximo nem
+  /// proíbe espaços; consumidores podem acrescentar essas regras em cadeia.
   const PasswordPolicy({
     this.minLength = 8,
     this.requireUppercase = true,
@@ -109,28 +123,7 @@ bool isIpv4(dynamic value) {
 
 /// Valida endereço IPv6 em formato completo ou comprimido (com `::` e zonas).
 bool isIpv6(dynamic value) {
-  final s = value?.toString() ?? '';
-  // Remove zona de link (ex: %eth0)
-  final clean = s.split('%').first;
-  return RegExp(
-    r'^('
-    r'([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|' // completo
-    r'([0-9a-fA-F]{1,4}:){1,7}:|' // ::
-    r':([0-9a-fA-F]{1,4}:){1,7}|' // ::x
-    r'([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|' // x::x
-    r'([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|'
-    r'([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|'
-    r'([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|'
-    r'([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|'
-    r'[0-9a-fA-F]{1,4}:(:[0-9a-fA-F]{1,4}){1,6}|'
-    r'::(ffff(:0{1,4})?:)?((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\.){3}'
-    r'(25[0-5]|(2[0-4]|1?[0-9])?[0-9])|' // ::ffff:IPv4
-    r'([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\.){3}'
-    r'(25[0-5]|(2[0-4]|1?[0-9])?[0-9])|' // IPv4-mapped
-    r'::([0-9a-fA-F]{1,4}:){0,5}[0-9a-fA-F]{1,4}|'
-    r'[0-9a-fA-F]{1,4}::([0-9a-fA-F]{1,4}:){0,4}[0-9a-fA-F]{1,4}'
-    r')$',
-  ).hasMatch(clean);
+  return value != null && isValidIpv6(value.toString());
 }
 
 // ── Regex genérico ───────────────────────────────────────────

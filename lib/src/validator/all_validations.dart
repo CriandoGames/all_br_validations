@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer' as developer;
 
 import 'package:all_result/all_result.dart';
 
@@ -10,12 +9,19 @@ import '../models/validation_error.dart';
 import 'internal/brazilian_phone_validator.dart';
 import 'internal/cns_validator.dart';
 import 'internal/email_validator.dart';
+import 'internal/ip_validator.dart';
 import 'internal/url_validator.dart';
 
+/// Fachada estática de validações, normalizações e consultas brasileiras.
+///
+/// Os métodos `is*` retornam booleanos sem registrar dados nem produzir
+/// efeitos colaterais; os métodos `validate*` retornam [Result] tipado.
 class AllValidations {
   AllValidations._();
 
-  //method help
+  /// Retorna se [value] corresponde integral ou parcialmente a [pattern].
+  ///
+  /// Retorna `false` quando [value] é nulo. O ancoramento depende do padrão.
   static bool hasMatch(String? value, String pattern) {
     return (value == null) ? false : RegExp(pattern).hasMatch(value);
   }
@@ -36,9 +42,11 @@ class AllValidations {
   /// Numeric only doesn't accepting "." which double data type have
   static bool isNumericOnly(String s) => hasMatch(s, r'^\d+$');
 
-  /// Numeric only but '' return true
+  /// Checks a complete decimal/scientific number; the empty string is valid.
   static bool isNumericFloat(String s) => hasMatch(
-      s, r'^(?:-?(?:[0-9]+))?(?:\.[0-9]*)?(?:[eE][\+\-]?(?:[0-9]+))?$');
+        s,
+        r'^(?:$|-?(?:(?:\d+(?:\.\d*)?)|(?:\.\d+))(?:[eE][+-]?\d+)?)$',
+      );
 
   /// Checks if string consist only Alphabet. (No Whitespace)
   static bool isAlphabetOnly(String s) => hasMatch(s, r'^[a-zA-Z]+$');
@@ -54,27 +62,32 @@ class AllValidations {
 
   /// Checks if string is an video file.
   static bool isVideo(String filePath) {
-    var ext = filePath.toLowerCase();
+    final normalized = filePath.toLowerCase();
+    final lastSeparator = normalized.lastIndexOf(RegExp(r'[/\\]'));
+    final fileName = normalized.substring(lastSeparator + 1);
+    final dot = fileName.lastIndexOf('.');
+    if (dot < 0) return false;
 
-    return ext.endsWith('.mp4') ||
-        ext.endsWith('.wmv') ||
-        ext.endsWith('.mpg') ||
-        ext.endsWith('.3gp') ||
-        ext.endsWith('.m4v') ||
-        ext.endsWith('.mgv') ||
-        ext.endsWith('.mov') ||
-        ext.endsWith('.mkv') ||
-        ext.endsWith('.ogv') ||
-        ext.endsWith('.qtm') ||
-        ext.endsWith('.srt') ||
-        ext.endsWith('.amc') ||
-        ext.endsWith('.dvx') ||
-        ext.endsWith('.flv') ||
-        ext.endsWith('.evo') ||
-        ext.endsWith('.avi') ||
-        ext.endsWith('rmvb') ||
-        ext.endsWith('.mpg') ||
-        ext.endsWith('mpeg');
+    const extensions = {
+      '.mp4',
+      '.wmv',
+      '.mpg',
+      '.3gp',
+      '.m4v',
+      '.mgv',
+      '.mov',
+      '.mkv',
+      '.ogv',
+      '.qtm',
+      '.amc',
+      '.dvx',
+      '.flv',
+      '.evo',
+      '.avi',
+      '.rmvb',
+      '.mpeg',
+    };
+    return extensions.contains(fileName.substring(dot));
   }
 
   /// Checks if string is an image file.
@@ -132,6 +145,7 @@ class AllValidations {
         allowCountryCode: true,
       );
 
+  /// Retorna se [ddd] é um dos 67 códigos brasileiros atribuídos.
   static bool isValidDDD(String ddd) {
     return Constants.ddds.contains(ddd);
   }
@@ -260,8 +274,7 @@ class AllValidations {
       hasMatch(s, r'^(?:(?:^|\.)(?:2(?:5[0-5]|[0-4]\d)|1?\d?\d)){4}$');
 
   /// Checks if string is IPv6.
-  static bool isIPv6(String s) => hasMatch(s,
-      r'^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){4}:([0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){2}:([0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(([0-9A-Fa-f]{1,4}:){0,5}:((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(::([0-9A-Fa-f]{1,4}:){0,5}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|([0-9A-Fa-f]{1,4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){1,7}:))$');
+  static bool isIPv6(String s) => isValidIpv6(s);
 
   /// Checks if string is hexadecimal.
   /// Example: HexColor => #12F
@@ -277,7 +290,10 @@ class AllValidations {
   /// Checks if num a EQUAL than num b.
   static bool isEqual(num a, num b) => a == b;
 
-  //Check if num is a cnpj
+  /// Valida CNPJ numérico com 14 dígitos e dígitos verificadores.
+  ///
+  /// Aceita somente o formato sem máscara ou `00.000.000/0000-00`. Para o
+  /// formato alfanumérico vigente, use [isCnpjAlphanumeric].
   static bool isCnpj(String cnpj) {
     if (!RegExp(
       r'^(?:\d{14}|\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2})$',
@@ -427,12 +443,10 @@ class AllValidations {
     );
     if (!acceptedFormat.hasMatch(str)) return false;
 
-    final creditCard = RegExp(
-      r'^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$',
-    );
     final digits = str.replaceAll(RegExp(r'[ -]'), '');
+    if (RegExp(r'^(\d)\1+$').hasMatch(digits)) return false;
 
-    return creditCard.hasMatch(digits) && _passesLuhn(digits);
+    return _passesLuhn(digits);
   }
 
   static bool _passesLuhn(String digits) {
@@ -535,9 +549,18 @@ class AllValidations {
     return filePath.toLowerCase().endsWith('.html');
   }
 
+  /// Valida senha média com no mínimo seis caracteres e duas categorias.
+  ///
+  /// As categorias são: letra ASCII minúscula, letra ASCII maiúscula e
+  /// dígito. Esta política legada difere de [PasswordPolicy.medium], que exige
+  /// as três categorias.
   static bool isMediumPassword(String password) => hasMatch(password,
       r'^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})');
 
+  /// Valida senha forte legada entre 8 e 99 caracteres sem espaços.
+  ///
+  /// Exige ao menos uma letra ASCII maiúscula, uma minúscula, um dígito e um
+  /// símbolo reconhecido. [PasswordPolicy.strong] não impõe máximo.
   static bool isStrongPassword(String password) => hasMatch(password,
       r'^(?=.*\d)(?=.*[~!@#$%^&*()_\-+=|\\{}[\]:;<>?/])(?=.*[A-Z])(?=.*[a-z])\S{8,99}$');
 
@@ -554,10 +577,15 @@ class AllValidations {
     return true;
   }
 
+  /// Valida placas antigas e Mercosul, ignorando caixa e espaços externos.
+  ///
+  /// Aceita `ABC-1234`, `ABC1234` e `ABC1D23`; caracteres ou separadores
+  /// internos extras são rejeitados.
   static bool isValidBrazilianLicensePlate(String plate) {
+    final normalized = plate.trim().toUpperCase();
     final oldModel = RegExp(r'^[A-Z]{3}-?\d{4}$'); // Ex.: ABC-1234
     final newModel = RegExp(r'^[A-Z]{3}\d[A-Z]\d{2}$'); // Ex.: ABC1D23
-    return oldModel.hasMatch(plate) || newModel.hasMatch(plate);
+    return oldModel.hasMatch(normalized) || newModel.hasMatch(normalized);
   }
 
   /// Valida se uma string é uma cor hexadecimal válida (#RRGGBB ou #RGB).
@@ -597,26 +625,13 @@ class AllValidations {
   static bool isName(String value) =>
       !hasMatch(value, r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]');
 
+  /// Retorna se todas as [key] existem em [map] e têm valor não nulo.
+  ///
+  /// String vazia e coleções vazias contam como valores existentes. O método
+  /// é puro e não registra chaves nem valores.
   static bool isMapExists({required List<String> key, required Map map}) {
     for (var currentKey in key) {
-      if (map.containsKey(currentKey)) {
-        if (map[currentKey] != null) {
-          if (map[currentKey].toString() == '') {
-            developer.log(
-              '$currentKey is empty value',
-            );
-          }
-          developer.log(
-            '$currentKey has value $map[currentKey]',
-          );
-        } else {
-          developer.log('Error', error: '$currentKey is null value');
-          return false;
-        }
-      } else {
-        developer.log('Error', error: '$currentKey is not found');
-        return false;
-      }
+      if (!map.containsKey(currentKey) || map[currentKey] == null) return false;
     }
     return true;
   }
@@ -919,8 +934,9 @@ class AllValidations {
     String property = 'placa',
     String message = 'Placa de veículo inválida.',
   }) {
-    return isValidBrazilianLicensePlate(plate)
-        ? Result.success(plate.toUpperCase())
+    final normalized = plate.trim().toUpperCase();
+    return isValidBrazilianLicensePlate(normalized)
+        ? Result.success(normalized)
         : Result.failure(ValidationError(property: property, message: message));
   }
 
@@ -974,8 +990,8 @@ class AllValidations {
 
   /// Valida chave PIX e retorna [Result] com o **tipo** identificado.
   ///
-  /// Os tipos possíveis em caso de sucesso são: `'CPF'`, `'Celular'`,
-  /// `'Email'` ou `'Chave Aleatória'`.
+  /// Os tipos possíveis em caso de sucesso são: `'CPF'`, `'CNPJ'`,
+  /// `'Celular'`, `'Email'` ou `'Chave Aleatória'`.
   ///
   /// ```dart
   /// AllValidations.validatePixKey('+5511912345678').fold(
@@ -992,6 +1008,11 @@ class AllValidations {
         RegExp(r'^\d+$').hasMatch(key.replaceAll(RegExp(r'[\s.\-]'), ''));
 
     if (isCpf(key)) return Result.success('CPF');
+    final unmaskedAlphanumericCnpj =
+        RegExp(r'^[A-Z0-9]{14}$', caseSensitive: false).hasMatch(key);
+    if (isCnpj(key) || (unmaskedAlphanumericCnpj && isCnpjAlphanumeric(key))) {
+      return Result.success('CNPJ');
+    }
     if (RegExp(r'^\+55\d{2}9\d{8}$').hasMatch(key)) {
       return Result.success('Celular');
     }

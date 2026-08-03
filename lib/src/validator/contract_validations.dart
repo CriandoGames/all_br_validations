@@ -4,7 +4,12 @@ import '../notifications/notifiable.dart';
 import 'all_validations.dart';
 import 'internal/email_validator.dart';
 
+/// Conjunto fluente de validações que adicionam [ValidationNotification].
+///
+/// Cada método mantém a instância encadeável e adiciona [message] associada a
+/// [property] quando sua condição não é satisfeita.
 class ContractValidations extends ValidationNotifiable {
+  /// Notifica quando [value] é verdadeiro.
   ContractValidations isFalse(bool value, String property, String message) {
     if (value) {
       addNotifications(
@@ -13,6 +18,10 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Notifica quando [password] não cumpre a política forte legada.
+  ///
+  /// A política exige 8 a 99 caracteres sem espaços, maiúscula, minúscula,
+  /// dígito e símbolo. String vazia recebe uma mensagem específica.
   ContractValidations isStrongPassword(
       String password, String property, String message) {
     // Verifica se a senha é nula ou vazia
@@ -31,6 +40,7 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Notifica quando [url] não possui esquema HTTP, HTTPS ou FTP válido.
   ContractValidations isURL(String url, String property, String message) {
     if (!AllValidations.isURL(url)) {
       addNotifications(
@@ -39,6 +49,7 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Notifica quando [phone] não é celular nem telefone fixo com DDD válido.
   ContractValidations isPhoneNumber(
       String phone, String property, String message) {
     if (!AllValidations.isBrazilianCellPhone(phone) &&
@@ -49,6 +60,7 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Notifica quando [zip] não é um CEP em um dos três formatos aceitos.
   ContractValidations isValidBRZip(
       String zip, String property, String message) {
     // Alinhado com AllValidations.isValidBRZip / BrZod().cep() para manter
@@ -60,6 +72,7 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Notifica quando [value] não é um UUID válido.
   ContractValidations isUUID(String value, String property, String message) {
     if (!AllValidations.isUUID(value)) {
       addNotifications(
@@ -68,6 +81,7 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Notifica quando [value], sem pontuação e caixa, não é palíndromo.
   ContractValidations isPalindrome(
       String value, String property, String message) {
     String cleanedValue = value.replaceAll(RegExp(r'[\W_]+'), '').toLowerCase();
@@ -79,6 +93,7 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Executa [validator] e notifica quando ele retorna `false`.
   ContractValidations customValidation(
       bool Function() validator, String property, String message) {
     if (!validator()) {
@@ -88,6 +103,7 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Notifica quando [value] não pertence a [enumValues].
   ContractValidations isEnum<T>(
       dynamic value, List<T> enumValues, String property, String message) {
     if (!enumValues.contains(value)) {
@@ -97,6 +113,7 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Notifica quando [startDate] não ocorre antes de [endDate].
   ContractValidations isBefore(
       DateTime startDate, DateTime endDate, String property, String message) {
     if (!startDate.isBefore(endDate)) {
@@ -106,6 +123,7 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Notifica quando [list] já contém [value].
   ContractValidations isUnique(
       dynamic value, List<dynamic> list, String property, String message) {
     if (list.contains(value)) {
@@ -115,6 +133,7 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Notifica quando [value] é falso.
   ContractValidations isTrue(bool value, String property, String message) =>
       isFalse(!value, property, message);
 
@@ -282,6 +301,9 @@ class ContractValidations extends ValidationNotifiable {
     return true;
   }
 
+  /// Notifica quando [value] é nulo.
+  ///
+  /// O nome histórico é preservado por compatibilidade.
   ContractValidations isNullOrNullable(
       dynamic value, String property, String message) {
     if (value == null) {
@@ -292,9 +314,17 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Notifica quando [val] é nulo ou uma string, mapa ou iterável vazio.
+  ///
+  /// Tipos sem conceito de vazio, como números e booleanos, são válidos e não
+  /// provocam chamadas dinâmicas.
   ContractValidations isNotNullOrEmpty(
       dynamic val, String property, String message) {
-    if (val == null || val.isEmpty) {
+    final isEmpty = val == null ||
+        (val is String && val.isEmpty) ||
+        (val is Iterable && val.isEmpty) ||
+        (val is Map && val.isEmpty);
+    if (isEmpty) {
       addNotifications(
           ValidationNotification(property: property, message: message));
     }
@@ -302,6 +332,7 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Notifica quando a string [val] está vazia.
   ContractValidations isNullOrEmpty(
       String val, String property, String message) {
     if (val.isEmpty) {
@@ -312,6 +343,7 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Notifica quando [val] está vazio ou tem menos de [min] caracteres.
   ContractValidations hasMinLen(
       String val, int min, String property, String message) {
     if (val.isEmpty || val.length < min) {
@@ -322,6 +354,7 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Notifica quando [val] está vazio ou tem mais de [max] caracteres.
   ContractValidations hasMaxLen(
       String val, int max, String property, String message) {
     if (val.isEmpty || val.length > max) {
@@ -332,6 +365,7 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Notifica quando [val] está vazio ou seu tamanho difere de [len].
   ContractValidations hasLen(
       String val, int len, String property, String message) {
     if (val.isEmpty || val.length != len) {
@@ -342,6 +376,7 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Notifica quando [val] não contém [text].
   ContractValidations contains(
       String val, String text, String property, String message) {
     if (!val.contains(text)) {
@@ -352,6 +387,7 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Notifica quando [text] não contém exclusivamente dígitos ASCII.
   ContractValidations isDigit(String text, String property, String message) {
     // Verifica se o texto contém apenas dígitos
     final numeric = RegExp(r'^\d+$');
@@ -363,6 +399,7 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Se [text] não estiver vazio, exige ao menos [min] caracteres.
   ContractValidations hasMinLengthIfNotNullOrEmpty(
       String text, int min, String property, String message) {
     if (text.isNotEmpty && text.length < min) {
@@ -373,6 +410,7 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Se [text] não estiver vazio, permite no máximo [max] caracteres.
   ContractValidations hasMaxLengthIfNotNullOrEmpty(
       String text, int max, String property, String message) {
     if (text.isNotEmpty && text.length > max) {
@@ -383,6 +421,7 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Se [text] não estiver vazio, exige exatamente [len] caracteres.
   ContractValidations hasExactLengthIfNotNullOrEmpty(
       String text, int len, String property, String message) {
     if (text.isNotEmpty && text.length != len) {
@@ -393,7 +432,7 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
-  // Bug fix: was calling isCpf instead of isEmail
+  /// Notifica quando [email] não é um endereço de e-mail válido.
   ContractValidations isEmail(String email, String property, String message) {
     if (!isAllowedEmail(email)) {
       addNotifications(
@@ -403,6 +442,7 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Notifica quando [cpf] não é um CPF numérico válido.
   ContractValidations isValidCPF(String cpf, String property, String message) {
     if (!AllValidations.isCpf(cpf)) {
       addNotifications(
@@ -412,6 +452,7 @@ class ContractValidations extends ValidationNotifiable {
     return this;
   }
 
+  /// Notifica quando [cnpj] não é um CNPJ numérico válido.
   ContractValidations isValidCNPJ(
       String cnpj, String property, String message) {
     if (!AllValidations.isCnpj(cnpj)) {
