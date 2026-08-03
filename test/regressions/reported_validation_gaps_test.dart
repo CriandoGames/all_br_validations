@@ -182,6 +182,24 @@ void main() {
   });
 
   group('AllValidations.validatePixKey', () {
+    group('CNPJ alfanumérico 00.000.000/E08G-12', () {
+      const masked = '00.000.000/E08G-12';
+      const unmasked = '00000000E08G12';
+
+      test('é um CNPJ alfanumérico válido com DVs 12', () {
+        expect(CnpjAlfanumerico.isValid(masked), isTrue);
+        expect(AllValidations.isCnpjAlphanumeric(masked), isTrue);
+      });
+
+      test('PIX rejeita a máscara e aceita o valor no formato DICT', () {
+        expect(AllValidations.validatePixKey(masked).isFailure, isTrue);
+
+        final result = AllValidations.validatePixKey(unmasked);
+        expect(result.isSuccess, isTrue);
+        expect(result.successValue, PixKeyType.cnpj);
+      });
+    });
+
     group('telefone segue o formato PIX', () {
       for (final invalid in [
         '+5500912345678',
