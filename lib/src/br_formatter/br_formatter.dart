@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'internal/cnpj_generator.dart';
 import 'internal/cpf_generator.dart';
 
 /// Utilitários de formatação para dados tipicamente brasileiros.
@@ -101,7 +102,7 @@ class BrFormatter {
   /// - [formatted]: se `true`, retorna no padrão `'99.999.999/9999-99'`.
   static String generateCnpj({bool formatted = false}) {
     final rand = Random.secure();
-    final d = List.generate(12, (_) => rand.nextInt(10));
+    final d = generateCnpjBase(rand);
 
     // Pesos do 1º DV: 5,4,3,2,9,8,7,6,5,4,3,2
     const w1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
@@ -220,7 +221,8 @@ class BrFormatter {
   }) {
     final raw = value.toStringAsFixed(decimals);
     final parts = raw.split('.');
-    final intPart = parts[0];
+    final isNegative = parts[0].startsWith('-');
+    final intPart = isNegative ? parts[0].substring(1) : parts[0];
     final decPart = decimals > 0 ? parts[1] : '';
 
     // Insere ponto de milhar na parte inteira
@@ -230,7 +232,8 @@ class BrFormatter {
       buf.write(intPart[i]);
     }
 
-    final result = decimals > 0 ? '${buf.toString()},$decPart' : buf.toString();
+    final groupedInt = isNegative ? '-$buf' : buf.toString();
+    final result = decimals > 0 ? '$groupedInt,$decPart' : groupedInt;
     return symbol ? 'R\$ $result' : result;
   }
 

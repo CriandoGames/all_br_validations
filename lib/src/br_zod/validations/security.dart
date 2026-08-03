@@ -125,13 +125,7 @@ bool isUrl(dynamic value) {
 
 /// Valida endereço IPv4 no formato `0.0.0.0` a `255.255.255.255`.
 bool isIpv4(dynamic value) {
-  final s = value?.toString() ?? '';
-  final parts = s.split('.');
-  if (parts.length != 4) return false;
-  return parts.every((p) {
-    final n = int.tryParse(p);
-    return n != null && n >= 0 && n <= 255 && p == n.toString();
-  });
+  return value != null && isValidIpv4(value.toString());
 }
 
 // ── IPv6 ─────────────────────────────────────────────────────

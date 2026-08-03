@@ -14,6 +14,8 @@ export 'validations/security.dart' show PasswordPolicy;
 /// ou uma mensagem de erro (inválido).
 typedef BrZodCallback = String? Function(dynamic value);
 
+typedef _BrZodCallback = Object? Function(dynamic value);
+
 /// Validador fluente para Flutter/Dart com foco em validações brasileiras.
 ///
 /// ## Uso básico
@@ -50,7 +52,7 @@ class BrZod {
   final ILocaleBrZod? locale;
 
   /// Lista interna de validadores encadeados.
-  final List<BrZodCallback> _validations = [];
+  final List<_BrZodCallback> _validations = [];
 
   ILocaleBrZod get _l => locale ?? defaultLocale;
 
@@ -62,7 +64,7 @@ class BrZod {
   // ── Core ────────────────────────────────────────────────────
 
   /// Adiciona um validador à cadeia e retorna `this` para encadeamento.
-  BrZod _add(BrZodCallback validator) {
+  BrZod _add(_BrZodCallback validator) {
     _validations.add(validator);
     return this;
   }
@@ -78,8 +80,8 @@ class BrZod {
     for (final validate in _validations) {
       final result = validate(value);
       if (result == null) continue;
-      if (result == _kOptionalSkip) return null; // optional short-circuit
-      return result;
+      if (identical(result, _optionalSkip)) return null;
+      return result as String;
     }
     return null;
   }
@@ -98,7 +100,7 @@ class BrZod {
   /// BrZod().optional().email().build // vazio = ok; preenchido = valida email
   /// ```
   BrZod optional() => _add(
-        (v) => g.isEmpty(v) ? _kOptionalSkip : null,
+        (v) => g.isEmpty(v) ? _optionalSkip : null,
       );
 
   /// Mínimo de [n] caracteres.
@@ -370,4 +372,4 @@ class BrZod {
 }
 
 /// Token interno usado pelo [BrZod.optional] para curto-circuitar a cadeia.
-const String _kOptionalSkip = '__br_zod_optional_skip__';
+final Object _optionalSkip = Object();

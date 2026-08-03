@@ -1,3 +1,17 @@
+/// Valida um IPv4 canônico, sem zeros à esquerda nos octetos.
+bool isValidIpv4(String value) {
+  final octets = value.split('.');
+  if (octets.length != 4) return false;
+
+  for (final octet in octets) {
+    if (!RegExp(r'^\d{1,3}$').hasMatch(octet)) return false;
+    final number = int.parse(octet);
+    if (number > 255 || octet != number.toString()) return false;
+  }
+
+  return true;
+}
+
 /// Valida um endereço IPv6 completo ou comprimido, com zona opcional.
 ///
 /// A zona deve ser informada após um único caractere %, como em
@@ -18,14 +32,11 @@ bool isValidIpv6(String value) {
     final lastColon = address.lastIndexOf(':');
     if (lastColon < 0) return false;
     final ipv4 = address.substring(lastColon + 1);
+    if (!isValidIpv4(ipv4)) return false;
     final octets = ipv4.split('.');
-    if (octets.length != 4) return false;
     final parsed = <int>[];
     for (final octet in octets) {
-      if (!RegExp(r'^\d{1,3}$').hasMatch(octet)) return false;
-      final number = int.parse(octet);
-      if (number > 255) return false;
-      parsed.add(number);
+      parsed.add(int.parse(octet));
     }
     final high = ((parsed[0] << 8) | parsed[1]).toRadixString(16);
     final low = ((parsed[2] << 8) | parsed[3]).toRadixString(16);

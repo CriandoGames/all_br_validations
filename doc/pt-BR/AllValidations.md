@@ -449,7 +449,7 @@ Regras de identificação por tipo:
 | `PixKeyType.cnpj` | CNPJ numérico válido (com ou sem máscara) ou alfanumérico válido sem máscara |
 | `PixKeyType.phone` | `+55` + DDD (2 dígitos) + `9` + 8 dígitos → `+5511912345678` |
 | `PixKeyType.email` | E-mail válido sem dígitos puros |
-| `PixKeyType.random` | UUID v4 |
+| `PixKeyType.random` | UUID RFC 4122 gerado pelo DICT |
 
 ---
 

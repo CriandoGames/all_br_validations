@@ -46,7 +46,7 @@ do agregador `all_validations_br`.
 |---|---|
 | Documentos brasileiros | CPF, CNPJ numérico, CNPJ alfanumérico, RG, CNH, RENAVAM, PIS/PASEP, Título de Eleitor e CNS |
 | Endereço e contato | CEP, DDD, celular brasileiro, telefone fixo, e-mail e URL |
-| Veículos, pagamentos e códigos | Placa antiga e Mercosul, cartão pelo algoritmo de Luhn, EAN-13 e chaves PIX por CPF, CNPJ, celular, e-mail ou UUID v4 |
+| Veículos, pagamentos e códigos | Placa antiga e Mercosul, cartão pelo algoritmo de Luhn, EAN-13 e chaves PIX por CPF, CNPJ, celular, e-mail ou UUID RFC 4122 do DICT |
 | Identificadores, rede e hashes | UUID v3/v4/v5, IPv4, IPv6, JSON, SSN, hexadecimal, MD5, SHA-1 e SHA-256 |
 | Datas, tipos e texto | Data brasileira, datetime ISO 8601, número, inteiro, decimal, booleano, binário, alfabético, maiúsculas, minúsculas, nome, nickname e palíndromo |
 | Segurança e formatos | Senha média ou forte, regex customizada e cor hexadecimal |

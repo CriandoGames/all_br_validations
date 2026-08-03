@@ -271,8 +271,7 @@ class AllValidations {
   static bool isBinary(String s) => hasMatch(s, r'^[0-1]+$');
 
   /// Checks if string is IPv4.
-  static bool isIPv4(String s) =>
-      hasMatch(s, r'^(?:(?:^|\.)(?:2(?:5[0-5]|[0-4]\d)|1?\d?\d)){4}$');
+  static bool isIPv4(String s) => isValidIpv4(s);
 
   /// Checks if string is IPv6.
   static bool isIPv6(String s) => isValidIpv6(s);
@@ -419,7 +418,6 @@ class AllValidations {
 
   /// Remove special characters (ex: `/`, `-`, `.`)
   static String removeCharacters(String valor) {
-    assert(valor.isNotEmpty, 'Valor não pode ser vazio');
     return valor.replaceAll(RegExp('[^0-9a-zA-Z]+'), '');
   }
 
@@ -445,6 +443,8 @@ class AllValidations {
     if (!acceptedFormat.hasMatch(str)) return false;
 
     final digits = str.replaceAll(RegExp(r'[ -]'), '');
+    if (digits.length < 13 || digits.length > 19) return false;
+    if (!RegExp(r'^\d+$').hasMatch(digits)) return false;
     if (RegExp(r'^(\d)\1+$').hasMatch(digits)) return false;
 
     return _passesLuhn(digits);
@@ -757,6 +757,7 @@ class AllValidations {
     int dv1 = sum1 % 11;
     if (estado == 1 || estado == 2) {
       if (dv1 == 0) dv1 = 1;
+      if (dv1 >= 10) dv1 = 0;
     } else {
       if (dv1 >= 10) dv1 = 0;
     }
@@ -772,6 +773,7 @@ class AllValidations {
     int dv2 = sum2 % 11;
     if (estado == 1 || estado == 2) {
       if (dv2 == 0) dv2 = 1;
+      if (dv2 >= 10) dv2 = 0;
     } else {
       if (dv2 >= 10) dv2 = 0;
     }
@@ -1023,7 +1025,7 @@ class AllValidations {
     if (!onlyDigits && isEmail(key)) return Result.success(PixKeyType.email);
     if (!onlyDigits &&
         RegExp(
-          r'^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+          r'^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
           caseSensitive: false,
         ).hasMatch(key)) {
       return Result.success(PixKeyType.random);
