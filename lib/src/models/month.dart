@@ -1,5 +1,11 @@
 /// Catálogos públicos dos meses em português do Brasil.
 class AllValidationsGetMonth {
+  /// Cria um acesso aos catálogos de meses por compatibilidade legada.
+  ///
+  /// Os catálogos são estáticos e podem ser consultados sem instanciar a
+  /// classe.
+  AllValidationsGetMonth();
+
   /// Meses de janeiro a dezembro.
   ///
   static const List<String> listMonths = [

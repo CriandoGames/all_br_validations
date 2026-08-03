@@ -9,6 +9,9 @@ import 'internal/email_validator.dart';
 /// Cada método mantém a instância encadeável e adiciona [message] associada a
 /// [property] quando sua condição não é satisfeita.
 class ContractValidations extends ValidationNotifiable {
+  /// Cria uma cadeia de validações sem notificações iniciais.
+  ContractValidations();
+
   /// Notifica quando [value] é verdadeiro.
   ContractValidations isFalse(bool value, String property, String message) {
     if (value) {

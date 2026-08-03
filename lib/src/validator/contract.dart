@@ -6,6 +6,9 @@ import 'contract_validations.dart';
 /// Cada método retorna a própria instância. Consulte [checkAll] para parar na
 /// primeira falha e [checkAllStrict] para registrar todas as falhas.
 class Contract extends ContractValidations {
+  /// Cria um contrato vazio, pronto para acumular falhas de validação.
+  Contract();
+
   /// Inicia a validação
   Contract requires() => this;
 

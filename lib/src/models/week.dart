@@ -1,5 +1,11 @@
 /// Catálogos de dias úteis e dias da semana em português do Brasil.
 class AllValidationsGetWeek {
+  /// Cria um acesso aos catálogos da semana por compatibilidade legada.
+  ///
+  /// Os catálogos são estáticos e podem ser consultados sem instanciar a
+  /// classe.
+  AllValidationsGetWeek();
+
   /// Dias úteis por extenso, de segunda a sexta-feira.
   static const List<String> listWorkDays = [
     'Segunda-Feira',
