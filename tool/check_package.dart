@@ -24,9 +24,15 @@ void main() {
   final packageName = RegExp(r'^name:\s*([a-z0-9_]+)\s*$', multiLine: true)
       .firstMatch(pubspec)
       ?.group(1);
+  final packageVersion = RegExp(r'^version:\s*([^\s]+)\s*$', multiLine: true)
+      .firstMatch(pubspec)
+      ?.group(1);
 
   if (packageName == null) {
     fail('pubspec.yaml não declara um nome de pacote válido.');
+  }
+  if (packageVersion != '1.0.2') {
+    fail('pubspec.yaml deve declarar a versão 1.0.2.');
   }
   if (RegExp(r'^\s+path:\s+', multiLine: true).hasMatch(pubspec)) {
     fail('pubspec.yaml publicável contém dependência path.');
@@ -99,6 +105,11 @@ void main() {
     final name = relative(file, root);
     if (source.contains('package:all_validations_br/')) {
       fail('$name importa o agregador.');
+    }
+    if (name.startsWith('lib/src/validator/') &&
+        (source.contains("import 'dart:developer'") ||
+            source.contains('developer.log'))) {
+      fail('$name registra dados dentro de um validador.');
     }
     for (final token in [
       'package:flutter/',

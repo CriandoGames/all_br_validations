@@ -8,15 +8,19 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        dart: ['3.0.0', stable]
     steps:
       - uses: actions/checkout@v4
       - uses: dart-lang/setup-dart@v1
         with:
-          sdk: stable
+          sdk: ${{ matrix.dart }}
       - run: dart tool/check_package.dart
       - run: dart pub get
       - run: dart format --output=none --set-exit-if-changed .
-      - run: dart analyze
+      - run: dart analyze --fatal-infos
       - run: dart test --coverage=coverage
       - run: dart doc
       - run: dart pub publish --dry-run
