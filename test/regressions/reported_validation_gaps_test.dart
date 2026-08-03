@@ -83,6 +83,46 @@ void main() {
     });
   });
 
+  group('BrZod.validate rejeita schemas inválidos', () {
+    for (final schema in [
+      'email',
+      123,
+      true,
+      <dynamic>[],
+      null,
+    ]) {
+      test('rejeita schema $schema', () {
+        expect(
+          () => BrZod.validate(
+            data: {'email': 'invalido'},
+            params: {'email': schema},
+          ),
+          throwsArgumentError,
+        );
+      });
+    }
+
+    test('informa o caminho completo do schema inválido', () {
+      expect(
+        () => BrZod.validate(
+          data: {
+            'user': {'email': 'invalido'},
+          },
+          params: {
+            'user': {'email': 'schema configurado incorretamente'},
+          },
+        ),
+        throwsA(
+          isA<ArgumentError>().having(
+            (error) => error.message,
+            'message',
+            'Schema inválido em user.email: esperado BrZod ou Map.',
+          ),
+        ),
+      );
+    });
+  });
+
   group('BrFormatter.formatCurrency', () {
     final cases = <double, String>{
       -12: 'R\$ -12,00',
@@ -118,7 +158,52 @@ void main() {
     });
   });
 
+  group('UUID verifica versão e variante', () {
+    test('rejeita UUID v3 com variante inválida', () {
+      const uuid = '6ba7b810-9dad-31d1-00b4-00c04fd430c8';
+
+      expect(AllValidations.isUUID(uuid, 3), isFalse);
+      expect(BrZod().uuid(version: '3').build(uuid), isNotNull);
+    });
+
+    test('rejeita variante inválida no modo padrão', () {
+      const uuid = '550e8400-e29b-41d4-0716-446655440000';
+
+      expect(AllValidations.isUUID(uuid), isFalse);
+      expect(AllValidations.validateUUID(uuid).isFailure, isTrue);
+      expect(BrZod().uuid().build(uuid), isNotNull);
+    });
+
+    test('rejeita versão fora do contrato documentado', () {
+      const uuid = '550e8400-e29b-01d4-a716-446655440000';
+
+      expect(AllValidations.isUUID(uuid), isFalse);
+    });
+  });
+
   group('AllValidations.validatePixKey', () {
+    group('telefone valida o DDD', () {
+      for (final invalid in [
+        '+5500912345678',
+        '+5510912345678',
+        '+5523912345678',
+      ]) {
+        test('rejeita $invalid', () {
+          expect(
+            AllValidations.validatePixKey(invalid).isFailure,
+            isTrue,
+          );
+        });
+      }
+
+      test('aceita telefone real com DDD', () {
+        final result = AllValidations.validatePixKey('+5521999998877');
+
+        expect(result.isSuccess, isTrue);
+        expect(result.successValue, PixKeyType.phone);
+      });
+    });
+
     test('aceita chave aleatória conforme exemplo do manual do Pix', () {
       final result = AllValidations.validatePixKey(
         '123e4567-e12b-12d1-a456-426655440000',

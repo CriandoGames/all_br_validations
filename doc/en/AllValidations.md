@@ -50,7 +50,7 @@ rule. `BrZod.url` and `Contract.isURL` use the same canonical URL rule.
 | `isMD5` | 32 lowercase hexadecimal characters |
 | `isSHA1` | 40 hex characters or colon-separated bytes |
 | `isSHA256` | 64 hex characters or colon-separated bytes |
-| `isUUID(value, version)` | versions `3`, `4`, `5`, or structural `all`; null is false |
+| `isUUID(value, version)` | versions `3`, `4`, `5`, or `all` for those versions; RFC variant is required and null is false |
 | `isIPv4` | IPv4 regex used by the historical facade |
 | `isIPv6` | complete/compressed IPv6, including `::`, embedded IPv4, and an optional zone suffix |
 | `isSSN` | US SSN format validation; no external lookup |

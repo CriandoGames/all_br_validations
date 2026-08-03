@@ -61,7 +61,7 @@ O método `.build` retorna `String? Function(dynamic)` — compatível diretamen
 | Método | Descrição |
 |--------|-----------|
 | `password({policy, msg})` | Senha conforme `PasswordPolicy`. Padrão: forte (8–99, sem espaços, maiúscula, minúscula, número, símbolo) |
-| `uuid({version, msg})` | UUID — `'3'`, `'4'`, `'5'` ou `'all'` (padrão) |
+| `uuid({version, msg})` | UUID com variante RFC — `'3'`, `'4'`, `'5'` ou `'all'` para essas versões (padrão) |
 | `url([msg])` | URL com esquema `http`, `https` ou `ftp` |
 | `ipv4([msg])` | Endereço IPv4 (`0.0.0.0` – `255.255.255.255`) |
 | `ipv6([msg])` | IPv6 completo ou comprimido, incluindo `::` e zona opcional |

@@ -485,7 +485,7 @@ void main() {
 
   test('Should call validation check if isUUID.', () {
     var sut = AllValidations.isUUID('edf06bf4-2c10-11ec-8d3d-0242ac130003');
-    expect(sut, true);
+    expect(sut, false);
 
     sut = AllValidations.isUUID('7b1e3188-e526-47ec-b7b8-fe390a1a2bee');
     expect(sut, true);

@@ -12,6 +12,7 @@ import 'internal/cns_validator.dart';
 import 'internal/email_validator.dart';
 import 'internal/ip_validator.dart';
 import 'internal/url_validator.dart';
+import 'internal/uuid_validator.dart';
 
 /// Fachada estática de validações, normalizações e consultas brasileiras.
 ///
@@ -469,30 +470,18 @@ class AllValidations {
 
   /// Check if the string is a UUID (version 3, 4 or 5).
   static bool isUUID(String? str, [version]) {
-    // Bug corrigido: `str!` explodia com TypeError quando `str` era nulo,
-    // apesar da assinatura aceitar `String?`.
     if (str == null) return false;
 
-    Map uuid = {
-      '3': RegExp(
-          r'^[0-9A-F]{8}-[0-9A-F]{4}-3[0-9A-F]{3}-[0-9A-F]{4}-[0-9A-F]{12}$'),
-      '4': RegExp(
-          r'^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$'),
-      '5': RegExp(
-          r'^[0-9A-F]{8}-[0-9A-F]{4}-5[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$'),
-      'all': RegExp(
-          r'^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$')
+    final allowedVersions = switch (version?.toString() ?? 'all') {
+      '3' => const {3},
+      '4' => const {4},
+      '5' => const {5},
+      'all' => const {3, 4, 5},
+      _ => null,
     };
 
-    if (version == null) {
-      version = 'all';
-    } else {
-      version = version.toString();
-    }
-
-    RegExp? pat = uuid[version];
-
-    return (pat != null && pat.hasMatch(str.toUpperCase()));
+    return allowedVersions != null &&
+        isValidUuid(str, allowedVersions: allowedVersions);
   }
 
   /// Check if the string is valid JSON
@@ -1019,15 +1008,12 @@ class AllValidations {
     if (isCnpj(key) || (unmaskedAlphanumericCnpj && isCnpjAlphanumeric(key))) {
       return Result.success(PixKeyType.cnpj);
     }
-    if (RegExp(r'^\+55\d{2}9\d{8}$').hasMatch(key)) {
+    if (isBrazilianCellPhone(key)) {
       return Result.success(PixKeyType.phone);
     }
     if (!onlyDigits && isEmail(key)) return Result.success(PixKeyType.email);
     if (!onlyDigits &&
-        RegExp(
-          r'^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
-          caseSensitive: false,
-        ).hasMatch(key)) {
+        isValidUuid(key, allowedVersions: const {1, 2, 3, 4, 5})) {
       return Result.success(PixKeyType.random);
     }
 

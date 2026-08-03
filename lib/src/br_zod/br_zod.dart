@@ -253,7 +253,8 @@ class BrZod {
       _add((v) =>
           sec.isPassword(v, policy: policy) ? null : message ?? _l.password);
 
-  /// UUID válido — qualquer versão por padrão. Versões: `'3'`, `'4'`, `'5'`, `'all'`.
+  /// UUID válido — versões 3, 4 e 5 por padrão.
+  /// Versões: `'3'`, `'4'`, `'5'`, `'all'`.
   BrZod uuid({String version = 'all', String? message}) =>
       _add((v) => sec.isUuid(v, version: version) ? null : message ?? _l.uuid);
 
@@ -288,6 +289,9 @@ class BrZod {
   ///   params: {'user': {'email': BrZod().email()}},
   /// );
   /// ```
+  ///
+  /// Lança [ArgumentError] quando algum item de [params] não é um [BrZod]
+  /// nem um mapa de schemas.
   static BrZodResult validate({
     required Map<String, dynamic> data,
     required Map<String, dynamic> params,
@@ -366,6 +370,10 @@ class BrZod {
           prefix: fullKey,
         );
         if (nestedErrors.isNotEmpty) errors[key] = nestedErrors;
+      } else {
+        throw ArgumentError(
+          'Schema inválido em $fullKey: esperado BrZod ou Map.',
+        );
       }
     });
   }

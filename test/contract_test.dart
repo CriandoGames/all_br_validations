@@ -59,7 +59,7 @@ main() {
     contract.isUUID(
         '550e8400-e29b-41d4-a716-446655440000', 'uuid', 'UUID inválido');
     contract.isUUID(
-        '123e4567-e89b-12d3-a456-426614174000', 'uuid', 'UUID inválido');
+        'a3bb189e-8bf9-3888-9912-ace4e6543002', 'uuid', 'UUID inválido');
     contract.isUUID('invalid-uuid', 'uuid', 'UUID inválido');
 
     expect(contract.notifications.length, 1);

@@ -149,7 +149,7 @@ authenticate a user.
 
 | Method | Contract |
 |---|---|
-| `uuid(version: ...)` | versions `3`, `4`, `5`, or structural `all` |
+| `uuid(version: ...)` | versions `3`, `4`, `5`, or `all` for those versions; RFC variant is required |
 | `url` | canonical `http`/`https`/`ftp` URL rule |
 | `ipv4` | four canonical decimal octets 0–255 |
 | `ipv6` | complete/compressed IPv6, optional link-zone suffix removed |

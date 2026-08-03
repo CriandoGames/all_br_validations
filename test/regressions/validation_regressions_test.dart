@@ -110,7 +110,7 @@ void main() {
         isTrue,
       );
       expect(
-        AllValidations.isUUID('edf06bf4-2c10-11ec-8d3d-0242ac130003', 'all'),
+        AllValidations.isUUID('a3bb189e-8bf9-3888-9912-ace4e6543002', 'all'),
         isTrue,
       );
     });

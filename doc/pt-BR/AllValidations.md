@@ -90,7 +90,7 @@ AllValidations.isHexadecimal('#FFF');   // true (forma abreviada)
 Aceita versões 3, 4 e 5. Sem argumento de versão valida qualquer UUID.
 
 ```dart
-AllValidations.isUUID('550e8400-e29b-41d4-a716-446655440000');       // true (qualquer)
+AllValidations.isUUID('550e8400-e29b-41d4-a716-446655440000');       // true (v3, v4 ou v5)
 AllValidations.isUUID('550e8400-e29b-41d4-a716-446655440000', 4);    // true (v4)
 AllValidations.isUUID('6ba7b810-9dad-31d1-80b4-00c04fd430c8', 3);    // true (v3)
 AllValidations.isUUID('550e8400-e29b-21d4-a716-446655440000', 4);    // false (v2 != v4)

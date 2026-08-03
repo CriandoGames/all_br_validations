@@ -6,6 +6,7 @@ library;
 
 import '../../validator/internal/url_validator.dart';
 import '../../validator/internal/ip_validator.dart';
+import '../../validator/internal/uuid_validator.dart';
 
 // ── Senha ────────────────────────────────────────────────────
 
@@ -93,24 +94,24 @@ bool isPassword(dynamic value,
 
 // ── UUID ─────────────────────────────────────────────────────
 
-/// Valida UUID. Por padrão aceita qualquer versão (`all`).
+/// Valida UUID. Por padrão aceita as versões 3, 4 e 5 (`all`).
 /// Versões suportadas: `'3'`, `'4'`, `'5'`, `'all'`.
 bool isUuid(dynamic value, {String version = 'all'}) {
   if (value == null) return false;
-  final s = value.toString().toUpperCase();
 
-  final patterns = <String, RegExp>{
-    '3': RegExp(
-        r'^[0-9A-F]{8}-[0-9A-F]{4}-3[0-9A-F]{3}-[0-9A-F]{4}-[0-9A-F]{12}$'),
-    '4': RegExp(
-        r'^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$'),
-    '5': RegExp(
-        r'^[0-9A-F]{8}-[0-9A-F]{4}-5[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$'),
-    'all': RegExp(
-        r'^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$'),
+  final allowedVersions = switch (version) {
+    '3' => const {3},
+    '4' => const {4},
+    '5' => const {5},
+    'all' => const {3, 4, 5},
+    _ => null,
   };
 
-  return patterns[version]?.hasMatch(s) ?? false;
+  return allowedVersions != null &&
+      isValidUuid(
+        value.toString(),
+        allowedVersions: allowedVersions,
+      );
 }
 
 // ── URL ──────────────────────────────────────────────────────
