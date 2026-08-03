@@ -8,7 +8,7 @@ void main() {
         final result = AllValidations.validatePixKey(cnpj);
 
         expect(result.isSuccess, isTrue);
-        expect(result.successValue, 'CNPJ');
+        expect(result.successValue, PixKeyType.cnpj);
       });
     }
 
@@ -16,7 +16,7 @@ void main() {
       final result = AllValidations.validatePixKey('12ABC34501DE35');
 
       expect(result.isSuccess, isTrue);
-      expect(result.successValue, 'CNPJ');
+      expect(result.successValue, PixKeyType.cnpj);
     });
 
     for (final invalid in [

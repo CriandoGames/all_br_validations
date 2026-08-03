@@ -5,6 +5,7 @@
 ### Fixed
 
 - Corrigida a identificação de CNPJ numérico e alfanumérico em chaves PIX.
+- `validatePixKey` agora retorna o enum `PixKeyType` em vez de strings.
 - Corrigida a validação estrita de datas e horários em `BrData`.
 - Corrigido o reconhecimento de IPv6 comprimido, inclusive `::` e zonas.
 - Evitado erro de runtime em `Contract.isNotNullOrEmpty` com tipos dinâmicos.

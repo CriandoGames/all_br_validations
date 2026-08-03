@@ -72,7 +72,7 @@ void main() {
 
     expect(cpf.successValue, '52998224725');
     expect(email.successValue, 'ana.souza@example.com');
-    expect(pix.successValue, 'Email');
+    expect(pix.successValue, PixKeyType.email);
     expect(
       AllValidations.isBrazilianCellPhone('(11) 91234-5678'),
       isTrue,

@@ -417,13 +417,14 @@ AllValidations.validateLicensePlate(' abc1D23 ');
 | `validateUUID` | `'uuid'` | valor original |
 | `validateStrongPassword` | `'senha'` | valor original |
 | `validateCreditCard` | `'cartao'` | dígitos puros |
-| `validatePixKey` | `'chavePix'` | tipo como string |
+| `validatePixKey` | `'chavePix'` | `PixKeyType` |
 
 ---
 
 ## Chave PIX
 
-`validatePixKey` retorna `Result` com o **tipo** da chave em caso de sucesso:
+`validatePixKey` retorna `Result<ValidationError, PixKeyType>` com o tipo da
+chave em caso de sucesso:
 
 ```dart
 AllValidations.validatePixKey('529.982.247-25').fold(
@@ -431,12 +432,12 @@ AllValidations.validatePixKey('529.982.247-25').fold(
   (tipo) => print('Tipo: $tipo'),
 );
 
-AllValidations.validatePixKey('529.982.247-25');              // Success('CPF')
-AllValidations.validatePixKey('11.222.333/0001-81');          // Success('CNPJ')
-AllValidations.validatePixKey('12ABC34501DE35');               // Success('CNPJ')
-AllValidations.validatePixKey('+5511912345678');              // Success('Celular')
-AllValidations.validatePixKey('user@example.com');            // Success('Email')
-AllValidations.validatePixKey('123e4567-e89b-4d3a-a456-426614174000'); // Success('Chave Aleatória')
+AllValidations.validatePixKey('529.982.247-25');              // Success(PixKeyType.cpf)
+AllValidations.validatePixKey('11.222.333/0001-81');          // Success(PixKeyType.cnpj)
+AllValidations.validatePixKey('12ABC34501DE35');              // Success(PixKeyType.cnpj)
+AllValidations.validatePixKey('+5511912345678');              // Success(PixKeyType.phone)
+AllValidations.validatePixKey('user@example.com');            // Success(PixKeyType.email)
+AllValidations.validatePixKey('123e4567-e89b-4d3a-a456-426614174000'); // Success(PixKeyType.random)
 AllValidations.validatePixKey('12345678901');                 // Failure(...)
 ```
 
@@ -444,11 +445,11 @@ Regras de identificação por tipo:
 
 | Tipo | Formato esperado |
 |------|-----------------|
-| `'CPF'` | CPF válido (com ou sem máscara) |
-| `'CNPJ'` | CNPJ numérico válido (com ou sem máscara) ou alfanumérico válido sem máscara |
-| `'Celular'` | `+55` + DDD (2 dígitos) + `9` + 8 dígitos → `+5511912345678` |
-| `'Email'` | E-mail válido sem dígitos puros |
-| `'Chave Aleatória'` | UUID v4 lowercase |
+| `PixKeyType.cpf` | CPF válido (com ou sem máscara) |
+| `PixKeyType.cnpj` | CNPJ numérico válido (com ou sem máscara) ou alfanumérico válido sem máscara |
+| `PixKeyType.phone` | `+55` + DDD (2 dígitos) + `9` + 8 dígitos → `+5511912345678` |
+| `PixKeyType.email` | E-mail válido sem dígitos puros |
+| `PixKeyType.random` | UUID v4 |
 
 ---
 

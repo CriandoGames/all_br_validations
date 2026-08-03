@@ -212,19 +212,19 @@ void main() {
     test('CPF como chave PIX retorna Success com tipo', () {
       final r = AllValidations.validatePixKey('529.982.247-25');
       expect(r.isSuccess, isTrue);
-      expect(r.successValue, 'CPF');
+      expect(r.successValue, PixKeyType.cpf);
     });
 
     test('celular como chave PIX retorna Success com tipo', () {
       final r = AllValidations.validatePixKey('+5511912345678');
       expect(r.isSuccess, isTrue);
-      expect(r.successValue, 'Celular');
+      expect(r.successValue, PixKeyType.phone);
     });
 
     test('e-mail como chave PIX retorna Success com tipo', () {
       final r = AllValidations.validatePixKey('carlos@exemplo.com');
       expect(r.isSuccess, isTrue);
-      expect(r.successValue, 'Email');
+      expect(r.successValue, PixKeyType.email);
     });
 
     test('chave inválida retorna Failure', () {

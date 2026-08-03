@@ -5,6 +5,7 @@ import 'package:all_result/all_result.dart';
 import '../cnpj/cnpj_alfanumerico.dart';
 import '../helpers/constants.dart';
 import '../models/brazilian_state.dart';
+import '../models/pix_key_type.dart';
 import '../models/validation_error.dart';
 import 'internal/brazilian_phone_validator.dart';
 import 'internal/cns_validator.dart';
@@ -990,18 +991,19 @@ class AllValidations {
         : Result.failure(ValidationError(property: property, message: message));
   }
 
-  /// Valida chave PIX e retorna [Result] com o **tipo** identificado.
+  /// Valida chave PIX e retorna [Result] com o [PixKeyType] identificado.
   ///
-  /// Os tipos possíveis em caso de sucesso são: `'CPF'`, `'CNPJ'`,
-  /// `'Celular'`, `'Email'` ou `'Chave Aleatória'`.
+  /// Os tipos possíveis em caso de sucesso são [PixKeyType.cpf],
+  /// [PixKeyType.cnpj], [PixKeyType.phone], [PixKeyType.email] ou
+  /// [PixKeyType.random].
   ///
   /// ```dart
   /// AllValidations.validatePixKey('+5511912345678').fold(
   ///   (err)  => print('Chave inválida'),
-  ///   (tipo) => print('Tipo: $tipo'),  // 'Celular'
+  ///   (tipo) => print('Tipo: $tipo'), // PixKeyType.phone
   /// );
   /// ```
-  static Result<ValidationError, String> validatePixKey(
+  static Result<ValidationError, PixKeyType> validatePixKey(
     String key, {
     String property = 'chavePix',
     String message = 'Chave PIX inválida.',
@@ -1009,22 +1011,22 @@ class AllValidations {
     final onlyDigits =
         RegExp(r'^\d+$').hasMatch(key.replaceAll(RegExp(r'[\s.\-]'), ''));
 
-    if (isCpf(key)) return Result.success('CPF');
+    if (isCpf(key)) return Result.success(PixKeyType.cpf);
     final unmaskedAlphanumericCnpj =
         RegExp(r'^[A-Z0-9]{14}$', caseSensitive: false).hasMatch(key);
     if (isCnpj(key) || (unmaskedAlphanumericCnpj && isCnpjAlphanumeric(key))) {
-      return Result.success('CNPJ');
+      return Result.success(PixKeyType.cnpj);
     }
     if (RegExp(r'^\+55\d{2}9\d{8}$').hasMatch(key)) {
-      return Result.success('Celular');
+      return Result.success(PixKeyType.phone);
     }
-    if (!onlyDigits && isEmail(key)) return Result.success('Email');
+    if (!onlyDigits && isEmail(key)) return Result.success(PixKeyType.email);
     if (!onlyDigits &&
         RegExp(
           r'^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
           caseSensitive: false,
         ).hasMatch(key)) {
-      return Result.success('Chave Aleatória');
+      return Result.success(PixKeyType.random);
     }
 
     return Result.failure(

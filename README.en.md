@@ -90,6 +90,7 @@ final validMobile =
     AllValidations.isBrazilianCellPhone('(11) 91234-5678');
 final validPlate = AllValidations.isValidBrazilianLicensePlate('abc1d23');
 final pix = AllValidations.validatePixKey('12ABC34501DE35');
+// pix.successValue == PixKeyType.cnpj
 ```
 
 Phones accept digits or the documented masks only; arbitrary punctuation,

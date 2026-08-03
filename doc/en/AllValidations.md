@@ -180,6 +180,9 @@ property/message details:
 | card | `validateCreditCard` |
 | PIX key | `validatePixKey` |
 
+`validatePixKey` returns `Result<ValidationError, PixKeyType>`. Successful
+values are `PixKeyType.cpf`, `cnpj`, `phone`, `email`, or `random`.
+
 ```dart
 final result = AllValidations.validateCPF(
   '529.982.247-25',

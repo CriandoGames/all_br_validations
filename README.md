@@ -89,6 +89,7 @@ final celularValido =
     AllValidations.isBrazilianCellPhone('(11) 91234-5678');
 final placaValida = AllValidations.isValidBrazilianLicensePlate('abc1d23');
 final pix = AllValidations.validatePixKey('12ABC34501DE35');
+// pix.successValue == PixKeyType.cnpj
 ```
 
 Telefones aceitam somente dígitos ou as máscaras documentadas; pontuação
