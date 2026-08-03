@@ -70,23 +70,50 @@ void main() {
       });
     }
 
-    test('caracteriza diferença histórica da política média', () {
-      expect(AllValidations.isMediumPassword('abcdef1'), isTrue);
-      expect(
-        security.isPassword('abcdef1', policy: PasswordPolicy.medium),
-        isFalse,
-      );
+    test('fachadas médias exigem as mesmas três categorias', () {
+      for (final password in ['abcdef1', 'ABCDEF1', 'Abcdef']) {
+        expect(AllValidations.isMediumPassword(password), isFalse);
+        expect(
+          security.isPassword(password, policy: PasswordPolicy.medium),
+          isFalse,
+        );
+      }
+
       expect(AllValidations.isMediumPassword('Abc123'), isTrue);
       expect(
         security.isPassword('Abc123', policy: PasswordPolicy.medium),
         isTrue,
       );
+
+      for (final password in ['Ab c123', 'Ab\nc123', 'Ab1${'x' * 100}']) {
+        expect(
+          security.isPassword(password, policy: PasswordPolicy.medium),
+          AllValidations.isMediumPassword(password),
+          reason: password,
+        );
+      }
     });
 
-    test('caracteriza limite histórico de 99 da fachada legada', () {
+    test('fachadas fortes aplicam o mesmo limite de 99 caracteres', () {
       final longPassword = 'Aa1!${'x' * 96}';
       expect(AllValidations.isStrongPassword(longPassword), isFalse);
-      expect(BrZod().password().build(longPassword), isNull);
+      expect(BrZod().password().build(longPassword), isNotNull);
+    });
+
+    test('fachadas fortes rejeitam espaços', () {
+      const password = 'Abc 123!';
+      expect(AllValidations.isStrongPassword(password), isFalse);
+      expect(BrZod().password().build(password), isNotNull);
+    });
+
+    test('política customizada pode liberar limite e espaços', () {
+      const policy = PasswordPolicy(
+        maxLength: null,
+        allowWhitespace: true,
+      );
+      final password = 'Aa1! ${'x' * 100}';
+      expect(security.isPassword(password, policy: policy), isTrue);
+      expect(BrZod().password(policy: policy).build(password), isNull);
     });
   });
 

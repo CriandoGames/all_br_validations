@@ -235,7 +235,7 @@ class BrZod {
   /// Senha válida conforme política configurável.
   ///
   /// Padrão (`PasswordPolicy.strong`): 8+ caracteres, maiúscula, minúscula,
-  /// número e símbolo especial.
+  /// número e símbolo especial, com no máximo 99 caracteres e sem espaços.
   ///
   /// ```dart
   /// // Forte (padrão)

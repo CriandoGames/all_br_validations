@@ -60,7 +60,7 @@ O método `.build` retorna `String? Function(dynamic)` — compatível diretamen
 
 | Método | Descrição |
 |--------|-----------|
-| `password({policy, msg})` | Senha conforme `PasswordPolicy`. Padrão: forte (8+, maiúscula, minúscula, número, símbolo) |
+| `password({policy, msg})` | Senha conforme `PasswordPolicy`. Padrão: forte (8–99, sem espaços, maiúscula, minúscula, número, símbolo) |
 | `uuid({version, msg})` | UUID — `'3'`, `'4'`, `'5'` ou `'all'` (padrão) |
 | `url([msg])` | URL com esquema `http`, `https` ou `ftp` |
 | `ipv4([msg])` | Endereço IPv4 (`0.0.0.0` – `255.255.255.255`) |
@@ -107,11 +107,13 @@ Configuração reutilizável de política de senha:
 // Presets prontos
 BrZod().required().password(policy: PasswordPolicy.weak).build   // 6+ chars
 BrZod().required().password(policy: PasswordPolicy.medium).build // 6+, maiúsc, minúsc, número
-BrZod().required().password(policy: PasswordPolicy.strong).build // padrão: 8+, todos os requisitos
+BrZod().required().password(policy: PasswordPolicy.strong).build // padrão: 8–99, sem espaços, todos os requisitos
 
 // Customizada
 const myPolicy = PasswordPolicy(
   minLength: 12,
+  maxLength: null,
+  allowWhitespace: true,
   requireUppercase: true,
   requireLowercase: true,
   requireNumber: true,
@@ -120,11 +122,11 @@ const myPolicy = PasswordPolicy(
 BrZod().required().password(policy: myPolicy).build
 ```
 
-| Preset | Comprimento mínimo | Maiúscula | Minúscula | Número | Símbolo |
-|--------|--------------------|-----------|-----------|--------|---------|
-| `weak` | 6 | — | — | — | — |
-| `medium` | 6 | ✓ | ✓ | ✓ | — |
-| `strong` *(padrão)* | 8 | ✓ | ✓ | ✓ | ✓ |
+| Preset | Comprimento | Espaços | Maiúscula | Minúscula | Número | Símbolo |
+|--------|-------------|---------|-----------|-----------|--------|---------|
+| `weak` | 6+ | permite | — | — | — | — |
+| `medium` | 6+ | permite | ✓ | ✓ | ✓ | — |
+| `strong` *(padrão)* | 8–99 | rejeita | ✓ | ✓ | ✓ | ✓ |
 
 ---
 

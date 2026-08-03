@@ -130,7 +130,7 @@ therefore requires DDD.
 | `isValidBrazilianLicensePlate` | legacy `ABC-1234`/`ABC1234` or Mercosur `ABC1D23` |
 | `isValidHexColor` | `#RGB` or `#RRGGBB` |
 | `isValidEAN13` | 13 digits with EAN-13 check digit |
-| `isMediumPassword` | historical medium-password grammar |
+| `isMediumPassword` | 6+ characters with upper, lower, and number |
 | `isStrongPassword` | 8–99 non-space characters with upper, lower, digit, and supported special character |
 | `isPalindrome` | accents/non-alphanumerics removed before case-insensitive comparison |
 | `isNickname` | ASCII alphanumeric endpoints with alphanumeric/underscore/dot inside |

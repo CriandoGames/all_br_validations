@@ -267,7 +267,7 @@ AllValidations.isCreditCard('abc4111111111111111xyz');  // false
 ```dart
 // Senha média: 6+ chars, combinação de maiúscula+minúscula, ou letra+número
 AllValidations.isMediumPassword('Abc123');   // true
-AllValidations.isMediumPassword('abc123');   // true
+AllValidations.isMediumPassword('abc123');   // false (sem maiúscula)
 AllValidations.isMediumPassword('abc');      // false (< 6 chars)
 
 // Senha forte: 8–99 chars, obriga maiúscula, minúscula, dígito E símbolo especial
@@ -524,8 +524,8 @@ AllValidationsGetWeek.listDaysWeekAbvr;
 | `isValidHexColor(s)` | `bool` | `#` obrigatório |
 | `isValidEAN13(s)` | `bool` | com DV |
 | `isCreditCard(s)` | `bool` | Luhn |
-| `isMediumPassword(s)` | `bool` | 6+ chars |
-| `isStrongPassword(s)` | `bool` | 8+ chars + símbolo |
+| `isMediumPassword(s)` | `bool` | 6+ chars, maiúscula, minúscula e número |
+| `isStrongPassword(s)` | `bool` | 8–99 chars sem espaços, maiúscula, minúscula, número e símbolo |
 | `isPalindrome(s)` | `bool` | remove acentos/pontuação |
 | `isNickname(s)` | `bool` | |
 | `isName(s)` | `bool` | |

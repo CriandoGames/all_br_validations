@@ -549,18 +549,20 @@ class AllValidations {
     return filePath.toLowerCase().endsWith('.html');
   }
 
-  /// Valida senha média com no mínimo seis caracteres e duas categorias.
+  /// Valida senha média com no mínimo seis caracteres.
   ///
-  /// As categorias são: letra ASCII minúscula, letra ASCII maiúscula e
-  /// dígito. Esta política legada difere de [PasswordPolicy.medium], que exige
-  /// as três categorias.
-  static bool isMediumPassword(String password) => hasMatch(password,
-      r'^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})');
+  /// Exige ao menos uma letra ASCII minúscula, uma maiúscula e um dígito,
+  /// seguindo a mesma regra de `PasswordPolicy.medium`.
+  static bool isMediumPassword(String password) =>
+      password.length >= 6 &&
+      password.contains(RegExp(r'[a-z]')) &&
+      password.contains(RegExp(r'[A-Z]')) &&
+      password.contains(RegExp(r'[0-9]'));
 
-  /// Valida senha forte legada entre 8 e 99 caracteres sem espaços.
+  /// Valida senha forte entre 8 e 99 caracteres sem espaços.
   ///
   /// Exige ao menos uma letra ASCII maiúscula, uma minúscula, um dígito e um
-  /// símbolo reconhecido. [PasswordPolicy.strong] não impõe máximo.
+  /// símbolo reconhecido, seguindo a mesma regra de `PasswordPolicy.strong`.
   static bool isStrongPassword(String password) => hasMatch(password,
       r'^(?=.*\d)(?=.*[~!@#$%^&*()_\-+=|\\{}[\]:;<>?/])(?=.*[A-Z])(?=.*[a-z])\S{8,99}$');
 

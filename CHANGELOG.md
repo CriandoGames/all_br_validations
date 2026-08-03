@@ -16,6 +16,8 @@
 - Ampliada a validação genérica de PAN por formato e algoritmo de Luhn.
 - Impedido que tipos incompatíveis sejam aceitos como objetos aninhados vazios.
 - Removidos logs de chaves e valores de mapas em `isMapExists`.
+- Unificadas as políticas de senha média e forte entre `AllValidations`,
+  `Contract` e `BrZod`.
 - Completada a documentação DartDoc da API e habilitado seu lint obrigatório.
 
 ## 1.0.1

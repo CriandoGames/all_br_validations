@@ -14,6 +14,12 @@ class PasswordPolicy {
   /// Quantidade mínima de caracteres.
   final int minLength;
 
+  /// Quantidade máxima de caracteres, ou `null` para não limitar.
+  final int? maxLength;
+
+  /// Permite caracteres de espaço em branco.
+  final bool allowWhitespace;
+
   /// Exige ao menos uma letra ASCII maiúscula.
   final bool requireUppercase;
 
@@ -28,10 +34,11 @@ class PasswordPolicy {
 
   /// Cria uma política configurável.
   ///
-  /// Por padrão equivale a [strong]. A política não impõe tamanho máximo nem
-  /// proíbe espaços; consumidores podem acrescentar essas regras em cadeia.
+  /// Por padrão equivale a [strong].
   const PasswordPolicy({
     this.minLength = 8,
+    this.maxLength = 99,
+    this.allowWhitespace = false,
     this.requireUppercase = true,
     this.requireLowercase = true,
     this.requireNumber = true,
@@ -41,6 +48,8 @@ class PasswordPolicy {
   /// Política fraca: apenas comprimento mínimo de 6.
   static const weak = PasswordPolicy(
     minLength: 6,
+    maxLength: null,
+    allowWhitespace: true,
     requireUppercase: false,
     requireLowercase: false,
     requireNumber: false,
@@ -50,22 +59,28 @@ class PasswordPolicy {
   /// Política média: maiúscula + minúscula + número, mínimo 6.
   static const medium = PasswordPolicy(
     minLength: 6,
+    maxLength: null,
+    allowWhitespace: true,
     requireUppercase: true,
     requireLowercase: true,
     requireNumber: true,
     requireSpecial: false,
   );
 
-  /// Política forte (padrão): todos os requisitos, mínimo 8.
+  /// Política forte: todos os requisitos, de 8 a 99 caracteres, sem espaços.
   static const strong = PasswordPolicy();
 }
 
 /// Valida senha conforme [policy] (padrão: forte — 8+ chars, maiúscula,
-/// minúscula, número e símbolo).
+/// minúscula, número e símbolo, máximo 99 e sem espaços).
 bool isPassword(dynamic value,
     {PasswordPolicy policy = PasswordPolicy.strong}) {
   final s = value?.toString() ?? '';
   if (s.length < policy.minLength) return false;
+  if (policy.maxLength case final maxLength?) {
+    if (s.length > maxLength) return false;
+  }
+  if (!policy.allowWhitespace && s.contains(RegExp(r'\s'))) return false;
   if (policy.requireUppercase && !s.contains(RegExp(r'[A-Z]'))) return false;
   if (policy.requireLowercase && !s.contains(RegExp(r'[a-z]'))) return false;
   if (policy.requireNumber && !s.contains(RegExp(r'[0-9]'))) return false;

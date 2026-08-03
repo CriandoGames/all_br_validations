@@ -582,7 +582,7 @@ void main() {
     expect(sut, false);
 
     sut = AllValidations.isMediumPassword('123456789a');
-    expect(sut, true);
+    expect(sut, false);
 
     sut = AllValidations.isMediumPassword('123456789aA');
     expect(sut, true);

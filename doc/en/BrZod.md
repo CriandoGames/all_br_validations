@@ -124,6 +124,8 @@ BrZod().password(policy: PasswordPolicy.medium);
 BrZod().password(
   policy: const PasswordPolicy(
     minLength: 12,
+    maxLength: null,
+    allowWhitespace: true,
     requireUppercase: true,
     requireLowercase: true,
     requireNumber: true,
@@ -136,9 +138,9 @@ Built-in constants:
 
 | Policy | Requirements |
 |---|---|
-| `PasswordPolicy.weak` | minimum 6 only |
-| `PasswordPolicy.medium` | minimum 6, upper, lower, number |
-| `PasswordPolicy.strong` | minimum 8, upper, lower, number, supported special |
+| `PasswordPolicy.weak` | minimum 6 only; whitespace and unlimited length allowed |
+| `PasswordPolicy.medium` | minimum 6, upper, lower, number; whitespace and unlimited length allowed |
+| `PasswordPolicy.strong` | 8–99, no whitespace, upper, lower, number, supported special |
 
 Password shape validation does not hash a password, check breaches, or
 authenticate a user.
