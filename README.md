@@ -72,7 +72,7 @@ o [catálogo do `BrZod`](doc/pt-BR/BrZod.md) e os
 
 ```yaml
 dependencies:
-  all_br_validations: ^1.0.2
+  all_br_validations: ^1.0.3
 ```
 
 ## Como usar

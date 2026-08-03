@@ -73,7 +73,7 @@ values.
 
 ```yaml
 dependencies:
-  all_br_validations: ^1.0.2
+  all_br_validations: ^1.0.3
 ```
 
 ## Usage

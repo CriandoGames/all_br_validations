@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.3
+
+### Documentação
+
+- Documentados explicitamente os construtores públicos dos catálogos de
+  meses, regiões, estados e dias da semana.
+- Documentados os construtores de `Contract` e `ContractValidations`.
+- Confirmada cobertura dartdoc integral da API pública, sem alteração de
+  comportamento.
+
 ## 1.0.2
 
 ### Breaking changes
