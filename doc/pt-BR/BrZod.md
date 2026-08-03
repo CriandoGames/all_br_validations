@@ -33,7 +33,7 @@ O método `.build` retorna `String? Function(dynamic)` — compatível diretamen
 | `email([msg])` | E-mail com regra compartilhada por `AllValidations` e `Contract` |
 | `phone([msg])` | Telefone BR — 8/9 dígitos sem DDD ou 10/11 com DDD; aceita máscaras `(DD) XXXX-XXXX` e `(DD) XXXXX-XXXX`; rejeita código do país, pontuação arbitrária e espaços externos |
 | `equals(other, [msg])` | Valor deve ser igual a `other` — útil para confirmação de senha |
-| `type<T>([msg])` | Valor deve ser do tipo `T` (`String`, `int`, `double`, `bool`) |
+| `type<T>([msg])` | `String` e tipos customizados usam `is T`; `int`, `double` e `bool` também aceitam strings convertíveis por compatibilidade |
 | `isDate([msg])` | Data válida — aceita `dd/MM/yyyy`, `yyyy-MM-dd` e ISO 8601 |
 | `isBefore(max, [msg])` | Data anterior a `max` |
 | `isAfter(min, [msg])` | Data posterior a `min` |
@@ -49,7 +49,7 @@ O método `.build` retorna `String? Function(dynamic)` — compatível diretamen
 | `cpfOuCnpj([msg])` | CPF **ou** CNPJ numérico — útil em campos de documento genérico |
 | `cep([msg])` | CEP — `00000-000` ou `00000000` |
 | `rg([msg])` | RG — formato mais comum, aceita dígito X |
-| `placa([msg])` | Placa — formato antigo (`ABC-1234`) e Mercosul (`ABC1D23`) |
+| `placa([msg])` | Placa antiga ou Mercosul, com normalização de caixa e espaços externos |
 | `cnh([msg])` | CNH — 11 dígitos, dois DVs via mod-11 |
 | `renavam([msg])` | RENAVAM — 9 ou 11 dígitos, mod-11 |
 | `pisPasep([msg])` | PIS/PASEP — 11 dígitos, mod-11 |
@@ -64,7 +64,7 @@ O método `.build` retorna `String? Function(dynamic)` — compatível diretamen
 | `uuid({version, msg})` | UUID — `'3'`, `'4'`, `'5'` ou `'all'` (padrão) |
 | `url([msg])` | URL com esquema `http`, `https` ou `ftp` |
 | `ipv4([msg])` | Endereço IPv4 (`0.0.0.0` – `255.255.255.255`) |
-| `ipv6([msg])` | Endereço IPv6 — formato completo ou comprimido |
+| `ipv6([msg])` | IPv6 completo ou comprimido, incluindo `::` e zona opcional |
 | `regex(pattern, {msg})` | Corresponde ao padrão regex arbitrário fornecido |
 
 ---

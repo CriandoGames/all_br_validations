@@ -1,6 +1,10 @@
 import '../notifications/notifiable.dart';
 import 'contract_validations.dart';
 
+/// Fachada fluente que acumula notificações de validação.
+///
+/// Cada método retorna a própria instância. Consulte [checkAll] para parar na
+/// primeira falha e [checkAllStrict] para registrar todas as falhas.
 class Contract extends ContractValidations {
   /// Inicia a validação
   Contract requires() => this;

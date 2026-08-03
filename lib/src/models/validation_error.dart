@@ -10,9 +10,13 @@
 /// );
 /// ```
 class ValidationError {
+  /// Nome lógico do campo inválido.
   final String property;
+
+  /// Mensagem apresentável que descreve a falha.
   final String message;
 
+  /// Cria um erro para [property] com a respectiva [message].
   const ValidationError({
     required this.property,
     required this.message,

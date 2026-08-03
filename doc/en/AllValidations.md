@@ -17,7 +17,7 @@ final valid = AllValidations.isCpf('529.982.247-25');
 | `isNull(value)` | true only for null |
 | `isNum(value)` | string parsed by `num.tryParse` |
 | `isNumericOnly(value)` | one or more decimal digits; no sign or decimal point |
-| `isNumericFloat(value)` | optional signed decimal/exponent shape, including historical empty alternative |
+| `isNumericFloat(value)` | complete signed decimal/exponent, or the historical empty alternative; punctuation/exponent alone is rejected |
 | `isAlphabetOnly(value)` | ASCII letters only, no whitespace |
 | `isBool(value)` | literal string `true` or `false` |
 | `isInt(value)` | signed integer with no invalid leading shape |
@@ -52,7 +52,7 @@ rule. `BrZod.url` and `Contract.isURL` use the same canonical URL rule.
 | `isSHA256` | 64 hex characters or colon-separated bytes |
 | `isUUID(value, version)` | versions `3`, `4`, `5`, or structural `all`; null is false |
 | `isIPv4` | IPv4 regex used by the historical facade |
-| `isIPv6` | complete/compressed IPv6 grammar used by the historical facade |
+| `isIPv6` | complete/compressed IPv6, including `::`, embedded IPv4, and an optional zone suffix |
 | `isSSN` | US SSN format validation; no external lookup |
 
 These methods recognize shapes only. They do not calculate a hash, allocate an
@@ -70,7 +70,8 @@ Use [`BrData`](BrData.md) for Brazilian `DD/MM/YYYY` formatting and parsing.
 ## File-extension checks
 
 `isVideo`, `isImage`, `isAudio`, `isPDF`, `isTxt`, `isChm`, `isVector`, and
-`isHTML` compare lowercased path suffixes. They do not inspect file contents,
+`isHTML` compare the complete lowercased extension. Subtitle `.srt` is not
+classified as video. They do not inspect file contents,
 MIME type, signatures, availability, or safety. Treat them as UI/convenience
 checks, not upload security controls.
 
@@ -149,9 +150,9 @@ Unicode normalization or sanitization API.
 
 ## Nested Map keys
 
-`isMapExists(key: path, map: data)` traverses a list of keys and returns false
-when a segment is absent or traversal cannot continue. It checks existence; it
-does not validate the final value's type.
+`isMapExists(key: path, map: data)` verifies that every listed key is present
+and non-null. Empty strings and collections count as existing values. The
+method does not log keys or values.
 
 ## Typed validate methods
 
@@ -197,7 +198,9 @@ parameter.
 ## PIX keys
 
 PIX validation classifies supported keys by their documented shape (CPF,
-CNPJ, phone, email, or EVP/UUID) and reuses canonical rules where applicable.
+numeric or alphanumeric CNPJ, phone, email, or EVP/UUID) and reuses canonical
+rules where applicable. Alphanumeric CNPJ is accepted unmasked, matching the
+DICT key shape.
 It does not contact a payment provider and cannot prove registration or
 ownership.
 

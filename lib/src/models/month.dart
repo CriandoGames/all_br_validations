@@ -1,4 +1,9 @@
+/// Catálogos públicos dos meses em português do Brasil.
 class AllValidationsGetMonth {
+  /// Meses de janeiro a dezembro.
+  ///
+  /// A lista permanece mutável por compatibilidade e deve ser tratada pelos
+  /// consumidores como somente leitura.
   static List<String> listMonths = [
     'Janeiro',
     'Fevereiro',
@@ -14,6 +19,7 @@ class AllValidationsGetMonth {
     'Dezembro',
   ];
 
+  /// Associa cada nome de mês ao número de 1 a 12.
   static Map<String, int> mapMonths = const {
     'Janeiro': 1,
     'Fevereiro': 2,

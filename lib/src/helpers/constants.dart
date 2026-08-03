@@ -1,5 +1,8 @@
+/// Constantes compartilhadas pelas validações e normalizações do pacote.
 class Constants {
   Constants._();
+
+  /// Caracteres acentuados reconhecidos por [AllValidations.removeAccents].
   static const List<String> accents = [
     'à',
     'è',
@@ -57,6 +60,7 @@ class Constants {
     'å'
   ];
 
+  /// Substituições posicionais correspondentes a [accents].
   static const List<String> noAccents = [
     'a',
     'e',
@@ -114,10 +118,11 @@ class Constants {
     'a'
   ];
 
-  // Lista oficial dos 67 DDDs atribuídos pela ANATEL. Precisa ficar em
-  // sincronia com o mapa em AllValidations.getStateByDDD — códigos como 23,
-  // 25, 26, 36, 52, 72, 76 e 78 nunca foram atribuídos e devem continuar
-  // fora desta lista.
+  /// Lista dos 67 DDDs brasileiros atribuídos pela ANATEL.
+  ///
+  /// Deve permanecer sincronizada com [AllValidations.getStateByDDD].
+  /// Códigos não atribuídos, como 23, 25, 26, 36, 52, 72, 76 e 78, não
+  /// pertencem à lista.
   static const List<String> ddds = [
     '11',
     '12',

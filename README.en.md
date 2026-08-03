@@ -46,7 +46,7 @@ not on the `all_validations_br` aggregator.
 |---|---|
 | Brazilian documents | CPF, numeric CNPJ, alphanumeric CNPJ, RG, CNH, RENAVAM, PIS/PASEP, voter registration, and CNS |
 | Address and contact | CEP, DDD, Brazilian mobile and landline phones, email, and URL |
-| Vehicles, payments, and codes | Legacy and Mercosur license plates, Luhn cards, EAN-13, and PIX keys using CPF, mobile phone, email, or UUID v4 |
+| Vehicles, payments, and codes | Legacy and Mercosur license plates, Luhn cards, EAN-13, and PIX keys using CPF, CNPJ, mobile phone, email, or UUID v4 |
 | Identifiers, network, and hashes | UUID v3/v4/v5, IPv4, IPv6, JSON, SSN, hexadecimal, MD5, SHA-1, and SHA-256 |
 | Dates, types, and text | Brazilian dates, ISO 8601 datetime, number, integer, decimal, boolean, binary, alphabetic, uppercase, lowercase, name, nickname, and palindrome |
 | Security and formats | Medium or strong passwords, custom regex, and hexadecimal colors |
@@ -73,7 +73,7 @@ values.
 
 ```yaml
 dependencies:
-  all_br_validations: ^1.0.1
+  all_br_validations: ^1.0.2
 ```
 
 ## Usage
@@ -88,8 +88,8 @@ final validAlphanumericCnpj =
     AllValidations.isCnpjAlphanumeric('12ABC34501DE35');
 final validMobile =
     AllValidations.isBrazilianCellPhone('(11) 91234-5678');
-final validPlate = AllValidations.isValidBrazilianLicensePlate('ABC1D23');
-final pix = AllValidations.validatePixKey('customer@example.com');
+final validPlate = AllValidations.isValidBrazilianLicensePlate('abc1d23');
+final pix = AllValidations.validatePixKey('12ABC34501DE35');
 ```
 
 Phones accept digits or the documented masks only; arbitrary punctuation,

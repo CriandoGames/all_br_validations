@@ -1,4 +1,6 @@
+/// Catálogos de dias úteis e dias da semana em português do Brasil.
 class AllValidationsGetWeek {
+  /// Dias úteis por extenso, de segunda a sexta-feira.
   static const List<String> listWorkDays = [
     'Segunda-Feira',
     'Terça-Feira',
@@ -7,6 +9,7 @@ class AllValidationsGetWeek {
     'Sexta-Feira',
   ];
 
+  /// Numeração dos dias úteis, com segunda-feira igual a 1.
   static Map<String, int> mapWorkDays = const {
     'Segunda-Feira': 1,
     'Terça-Feira': 2,
@@ -15,6 +18,9 @@ class AllValidationsGetWeek {
     'Sexta-Feira': 5,
   };
 
+  /// Formas abreviadas dos dias úteis, de segunda a sexta.
+  ///
+  /// A lista permanece mutável por compatibilidade.
   static List<String> listWorkDaysAbvr = [
     'Segunda',
     'Terça',
@@ -23,6 +29,7 @@ class AllValidationsGetWeek {
     'Sexta',
   ];
 
+  /// Numeração das formas abreviadas de dias úteis.
   static Map<String, int> mapWorkDaysAbvr = const {
     'Segunda': 1,
     'Terça': 2,
@@ -30,6 +37,8 @@ class AllValidationsGetWeek {
     'Quinta': 4,
     'Sexta': 5,
   };
+
+  /// Semana por extenso iniciada na segunda-feira.
   static const List<String> listDaysWeek = [
     'Segunda-Feira',
     'Terça-Feira',
@@ -40,6 +49,7 @@ class AllValidationsGetWeek {
     'Domingo'
   ];
 
+  /// Semana abreviada iniciada na segunda-feira.
   static const List<String> listDaysWeekAbvr = [
     'Segunda',
     'Terça',
@@ -50,6 +60,7 @@ class AllValidationsGetWeek {
     'Domingo'
   ];
 
+  /// Numeração da semana por extenso iniciada no domingo.
   static Map<String, int> mapDaysWeekOrdered = const {
     'Domingo': 1,
     'Segunda-Feira': 2,
@@ -60,6 +71,10 @@ class AllValidationsGetWeek {
     'Sábado': 7,
   };
 
+  /// Semana abreviada iniciada no domingo.
+  ///
+  /// Diferentemente de [listDaysWeek], esta lista segue a ordenação dominical
+  /// e permanece mutável por compatibilidade.
   static List<String> listDaysWeekOrdered = [
     'Domingo',
     'Segunda',
@@ -70,6 +85,7 @@ class AllValidationsGetWeek {
     'Sábado',
   ];
 
+  /// Numeração da semana abreviada iniciada no domingo.
   static Map<String, int> mapDaysWeekOrderAbvr = const {
     'Domingo': 1,
     'Segunda': 2,

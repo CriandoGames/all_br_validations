@@ -51,6 +51,7 @@ Exemplos que lançam `FormatException`:
 BrData.parse('31/02/2024'); // ❌ fevereiro não tem 31 dias
 BrData.parse('29/02/2023'); // ❌ 2023 não é bissexto
 BrData.parse('2026-06-26'); // ❌ formato ISO — use HelperUtil.isValidDate para isso
+BrData.parse('1/1/2026');   // ❌ zeros à esquerda são obrigatórios
 BrData.parse('abc');        // ❌ não numérico
 ```
 
@@ -70,7 +71,9 @@ Exemplos que lançam `FormatException`:
 ```dart
 BrData.parseWithTime('26/06/2026 14:30:00'); // ❌ segundos não suportados
 BrData.parseWithTime('26/06/2026');          // ❌ falta a hora
-BrData.parseWithTime('26/06/2026 25:00');    // ❌ hora inválida (int.parse passa, mas hora 25 é aceita pelo DateTime — cuidado)
+BrData.parseWithTime('26/06/2026 25:00');    // ❌ hora fora de 00–23
+BrData.parseWithTime('26/06/2026 14:60');    // ❌ minuto fora de 00–59
+BrData.parseWithTime('26/06/2026 4:5');      // ❌ exige dois dígitos
 ```
 
 ---

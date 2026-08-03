@@ -98,6 +98,8 @@ BrFormatter.formatPhone('1133334444',  ddd: false); // '3333-4444'
 // Extrair apenas o DDD
 BrFormatter.extractDdd('11999998877'); // '11'
 BrFormatter.extractDdd('1133334444');  // '11'
+BrFormatter.extractDdd('+55 11 99999-8877'); // '11'
+BrFormatter.extractDdd('999998877');   // '' (número local, sem DDD)
 
 // Remove máscara
 BrFormatter.stripPhone('(11) 99999-8877'); // '11999998877'

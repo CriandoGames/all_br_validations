@@ -1,15 +1,27 @@
 import 'dart:developer' as dev;
 import 'package:all_result/all_result.dart';
 
+/// Acumula notificações produzidas por validações de contrato.
 class ValidationNotifiable {
   late List<ValidationNotification> _notifications;
 
+  /// Lista mutável de notificações acumuladas.
+  ///
+  /// A referência interna é exposta por compatibilidade; prefira
+  /// [addNotifications] e, em [Contract], `clearNotifications()`.
   List<ValidationNotification> get notifications => _notifications;
 
+  /// Cria uma instância sem notificações.
   ValidationNotifiable() {
     _notifications = <ValidationNotification>[];
   }
 
+  /// Adiciona notificações a partir de formatos compatíveis.
+  ///
+  /// [r] pode ser uma [ValidationNotification], uma lista tipada de
+  /// notificações, outro [ValidationNotifiable] ou uma lista dinâmica cujos
+  /// dois primeiros itens sejam, respectivamente, propriedade e mensagem.
+  /// Outros valores são ignorados.
   void addNotifications<T>(T r) {
     if (r is ValidationNotification) {
       _notifications.add(r);
@@ -42,7 +54,10 @@ class ValidationNotifiable {
     }
   }
 
+  /// `true` quando existe ao menos uma notificação.
   bool get invalid => _notifications.isNotEmpty;
+
+  /// `true` quando nenhuma notificação foi adicionada.
   bool get isValid => !invalid;
 
   /// Converte o estado de validação em um [Result].
@@ -63,10 +78,15 @@ class ValidationNotifiable {
   }
 }
 
+/// Descreve uma falha de validação associada a uma propriedade.
 class ValidationNotification {
+  /// Nome lógico da propriedade inválida.
   final String property;
+
+  /// Mensagem que explica a falha.
   final String message;
 
+  /// Cria uma notificação para [property] com [message].
   ValidationNotification({required this.property, required this.message});
 
   /// Converte a notificação para um mapa (JSON).

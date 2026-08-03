@@ -12,6 +12,10 @@ class BrZodResult {
   /// Lista plana de erros no formato `"campo: mensagem"`.
   final List<String> errorList;
 
+  /// Cria um resultado com seu estado e as duas representações dos erros.
+  ///
+  /// [errors] preserva o aninhamento do schema; [errorList] usa caminhos com
+  /// pontos, como `user.email: E-mail inválido`.
   const BrZodResult({
     required this.isValid,
     required this.errors,

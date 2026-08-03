@@ -25,6 +25,9 @@ AllValidations.isNumericOnly('1.5');  // false
 
 AllValidations.isNumericFloat('1.5'); // true  — aceita string vazia também
 AllValidations.isNumericFloat('');    // true
+AllValidations.isNumericFloat('-.5'); // true
+AllValidations.isNumericFloat('.');   // false — exige ao menos um dígito
+AllValidations.isNumericFloat('e2');  // false
 
 AllValidations.isAlphabetOnly('abc'); // true  — sem espaço
 AllValidations.isAlphabetOnly('ab1'); // false
@@ -102,7 +105,9 @@ AllValidations.isIPv4('192.168.1.1');   // true
 AllValidations.isIPv4('999.0.0.1');     // false
 
 AllValidations.isIPv6('::1');           // true
+AllValidations.isIPv6('::');            // true
 AllValidations.isIPv6('2001:db8::1');   // true
+AllValidations.isIPv6('fe80::1%eth0');   // true (zona de interface)
 
 // DateTime no formato ISO8601 / UTC (ex: '2026-06-26 14:30:00.000Z')
 AllValidations.isDateTime('2026-06-26T14:30:00.000Z');  // true
@@ -121,6 +126,7 @@ AllValidations.isImage('photo.webp'); // false
 // Vídeos
 AllValidations.isVideo('clip.mp4');   // true — .mp4 .wmv .avi .mkv .mov .flv e outros
 AllValidations.isVideo('clip.webm'); // false
+AllValidations.isVideo('legenda.srt'); // false — legenda não é vídeo
 
 // Áudio
 AllValidations.isAudio('song.mp3');   // true — .mp3 .wav .wma .amr .ogg
@@ -213,12 +219,13 @@ AllValidations.isValidDDD('20');  // false
 
 ### Placas de veículo
 
-Suporta formato antigo (`ABC-1234`) e Mercosul (`ABC1D23`):
+Suporta formato antigo (`ABC-1234`) e Mercosul (`ABC1D23`). Espaços
+externos são removidos e letras minúsculas são normalizadas:
 
 ```dart
 AllValidations.isValidBrazilianLicensePlate('ABC-1234'); // true  (formato antigo)
 AllValidations.isValidBrazilianLicensePlate('ABC1D23');  // true  (Mercosul)
-AllValidations.isValidBrazilianLicensePlate('abc1D23');  // false (minúsculas)
+AllValidations.isValidBrazilianLicensePlate(' abc1D23 '); // true
 ```
 
 > ⚠️ O formato Mercosul é `ABC1D23` — sem hífen. `ABC1-D23` retorna `false`.
@@ -348,7 +355,9 @@ Mapeamento resumido: 11–19 → SP · 21/22/24 → RJ · 27/28 → ES · 31–3
 
 ## Verificação de chaves em Mapas
 
-`isMapExists` verifica se todas as chaves da lista existem no map e não são `null`. Loga via `dart:developer` cada chave encontrada ou ausente.
+`isMapExists` verifica se todas as chaves da lista existem no map e não são
+`null`. String vazia conta como valor existente. O método é puro: não registra
+chaves nem valores.
 
 ```dart
 final map = {'status': 'ok', 'data': {'id': 1}};
@@ -356,6 +365,7 @@ final map = {'status': 'ok', 'data': {'id': 1}};
 AllValidations.isMapExists(key: ['status', 'data'], map: map); // true
 AllValidations.isMapExists(key: ['status', 'user'], map: map); // false ('user' não existe)
 AllValidations.isMapExists(key: ['status'], map: {'status': null}); // false (valor null)
+AllValidations.isMapExists(key: ['status'], map: {'status': ''}); // true
 ```
 
 ---
@@ -382,8 +392,8 @@ AllValidations.validateCPF('123',
 AllValidations.validateEmail('Carlos@Exemplo.COM');
 // Success('carlos@exemplo.com')
 
-// Placa — sucesso retorna toUpperCase()
-AllValidations.validateLicensePlate('abc1D23');
+// Placa — sucesso retorna trim().toUpperCase()
+AllValidations.validateLicensePlate(' abc1D23 ');
 // Success('ABC1D23')
 ```
 
@@ -402,7 +412,7 @@ AllValidations.validateLicensePlate('abc1D23');
 | `validatePIS` | `'pis'` | dígitos puros |
 | `validateTituloEleitor` | `'tituloEleitor'` | dígitos puros |
 | `validateRG` | `'rg'` | valor original |
-| `validateLicensePlate` | `'placa'` | `toUpperCase()` |
+| `validateLicensePlate` | `'placa'` | `trim().toUpperCase()` |
 | `validateURL` | `'url'` | valor original |
 | `validateUUID` | `'uuid'` | valor original |
 | `validateStrongPassword` | `'senha'` | valor original |
@@ -422,6 +432,8 @@ AllValidations.validatePixKey('529.982.247-25').fold(
 );
 
 AllValidations.validatePixKey('529.982.247-25');              // Success('CPF')
+AllValidations.validatePixKey('11.222.333/0001-81');          // Success('CNPJ')
+AllValidations.validatePixKey('12ABC34501DE35');               // Success('CNPJ')
 AllValidations.validatePixKey('+5511912345678');              // Success('Celular')
 AllValidations.validatePixKey('user@example.com');            // Success('Email')
 AllValidations.validatePixKey('123e4567-e89b-4d3a-a456-426614174000'); // Success('Chave Aleatória')
@@ -433,6 +445,7 @@ Regras de identificação por tipo:
 | Tipo | Formato esperado |
 |------|-----------------|
 | `'CPF'` | CPF válido (com ou sem máscara) |
+| `'CNPJ'` | CNPJ numérico válido (com ou sem máscara) ou alfanumérico válido sem máscara |
 | `'Celular'` | `+55` + DDD (2 dígitos) + `9` + 8 dígitos → `+5511912345678` |
 | `'Email'` | E-mail válido sem dígitos puros |
 | `'Chave Aleatória'` | UUID v4 lowercase |

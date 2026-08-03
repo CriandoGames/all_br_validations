@@ -1,7 +1,21 @@
 import '../../helpers/constants.dart';
 
-enum BrazilianPhoneType { cellPhone, landline, any }
+/// Tipo de assinante aceito pela regra canônica de telefone brasileiro.
+enum BrazilianPhoneType {
+  /// Celular com nove dígitos e prefixo 9.
+  cellPhone,
 
+  /// Telefone fixo com oito dígitos e prefixo de 2 a 5.
+  landline,
+
+  /// Celular ou telefone fixo.
+  any,
+}
+
+/// Valida [input] segundo formato, DDD e tipo de assinante.
+///
+/// [requireAreaCode] controla a obrigatoriedade do DDD e [allowCountryCode]
+/// permite o prefixo brasileiro 55 nos formatos reconhecidos.
 bool isValidBrazilianPhone(
   String input, {
   required BrazilianPhoneType type,

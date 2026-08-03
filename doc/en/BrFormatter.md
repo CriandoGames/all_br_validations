@@ -63,6 +63,8 @@ does not verify that an address exists.
 ```dart
 BrFormatter.stripPhone('(11) 91234-5678'); // 11912345678
 BrFormatter.extractDdd('(11) 91234-5678'); // 11
+BrFormatter.extractDdd('+55 11 91234-5678'); // 11
+BrFormatter.extractDdd('912345678'); // empty: local number has no DDD
 BrFormatter.formatPhone('11912345678');    // (11) 91234-5678
 BrFormatter.formatPhone('11912345678', ddd: false); // 91234-5678
 ```
@@ -72,6 +74,8 @@ mobile). Passing `ddd: false` omits the two DDD digits from the output; it does
 not make the input DDD optional. The method throws `ArgumentError` for
 incompatible lengths. Formatting does not validate that
 the DDD exists or that a number is active; use `AllValidations` as needed.
+`extractDdd` recognizes complete 10/11-digit national numbers and removes a
+Brazilian country code only from compatible 12/13-digit inputs.
 
 ## Currency
 

@@ -46,7 +46,7 @@ do agregador `all_validations_br`.
 |---|---|
 | Documentos brasileiros | CPF, CNPJ numérico, CNPJ alfanumérico, RG, CNH, RENAVAM, PIS/PASEP, Título de Eleitor e CNS |
 | Endereço e contato | CEP, DDD, celular brasileiro, telefone fixo, e-mail e URL |
-| Veículos, pagamentos e códigos | Placa antiga e Mercosul, cartão pelo algoritmo de Luhn, EAN-13 e chaves PIX por CPF, celular, e-mail ou UUID v4 |
+| Veículos, pagamentos e códigos | Placa antiga e Mercosul, cartão pelo algoritmo de Luhn, EAN-13 e chaves PIX por CPF, CNPJ, celular, e-mail ou UUID v4 |
 | Identificadores, rede e hashes | UUID v3/v4/v5, IPv4, IPv6, JSON, SSN, hexadecimal, MD5, SHA-1 e SHA-256 |
 | Datas, tipos e texto | Data brasileira, datetime ISO 8601, número, inteiro, decimal, booleano, binário, alfabético, maiúsculas, minúsculas, nome, nickname e palíndromo |
 | Segurança e formatos | Senha média ou forte, regex customizada e cor hexadecimal |
@@ -72,7 +72,7 @@ o [catálogo do `BrZod`](doc/pt-BR/BrZod.md) e os
 
 ```yaml
 dependencies:
-  all_br_validations: ^1.0.1
+  all_br_validations: ^1.0.2
 ```
 
 ## Como usar
@@ -87,8 +87,8 @@ final cnpjAlfaValido =
     AllValidations.isCnpjAlphanumeric('12ABC34501DE35');
 final celularValido =
     AllValidations.isBrazilianCellPhone('(11) 91234-5678');
-final placaValida = AllValidations.isValidBrazilianLicensePlate('ABC1D23');
-final pix = AllValidations.validatePixKey('cliente@example.com');
+final placaValida = AllValidations.isValidBrazilianLicensePlate('abc1d23');
+final pix = AllValidations.validatePixKey('12ABC34501DE35');
 ```
 
 Telefones aceitam somente dígitos ou as máscaras documentadas; pontuação

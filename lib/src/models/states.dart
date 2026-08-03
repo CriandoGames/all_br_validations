@@ -1,4 +1,6 @@
+/// Catálogos dos estados e do Distrito Federal.
 class AllValidationsGetStates {
+  /// Nomes das 27 unidades federativas em ordem das siglas.
   static const List<String> listStates = [
     'Acre',
     'Alagoas',
@@ -29,6 +31,7 @@ class AllValidationsGetStates {
     'Tocantins',
   ];
 
+  /// Siglas oficiais correspondentes, posição a posição, a [listStates].
   static const List<String> listStatesAcronym = [
     'AC',
     'AL',

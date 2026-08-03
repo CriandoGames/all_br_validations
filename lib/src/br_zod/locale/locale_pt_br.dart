@@ -2,6 +2,7 @@ import 'i_locale_br_zod.dart';
 
 /// Locale padrão do [BrZod] em Português do Brasil.
 class LocalePtBR implements ILocaleBrZod {
+  /// Cria o conjunto padrão de mensagens em português do Brasil.
   const LocalePtBR();
 
   // ── Genéricas ──────────────────────────────────────────────
