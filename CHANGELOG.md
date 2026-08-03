@@ -2,10 +2,18 @@
 
 ## 1.0.2
 
+### Breaking changes
+
+- `AllValidations.validatePixKey` agora retorna
+  `Result<ValidationError, PixKeyType>`; comparações com strings como `'CPF'`
+  devem usar `PixKeyType.cpf`.
+- `BrZod.type<T>()` e `isType<T>()` agora verificam estritamente `value is T`.
+  Strings convertíveis, como `'123'` para `int` e `'true'` para `bool`, passam
+  a ser rejeitadas.
+
 ### Fixed
 
 - Corrigida a identificação de CNPJ numérico e alfanumérico em chaves PIX.
-- `validatePixKey` agora retorna o enum `PixKeyType` em vez de strings.
 - Corrigida a validação estrita de datas e horários em `BrData`.
 - Corrigido o reconhecimento de IPv6 comprimido, inclusive `::` e zonas.
 - Evitado erro de runtime em `Contract.isNotNullOrEmpty` com tipos dinâmicos.

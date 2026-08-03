@@ -33,7 +33,7 @@ O método `.build` retorna `String? Function(dynamic)` — compatível diretamen
 | `email([msg])` | E-mail com regra compartilhada por `AllValidations` e `Contract` |
 | `phone([msg])` | Telefone BR — 8/9 dígitos sem DDD ou 10/11 com DDD; aceita máscaras `(DD) XXXX-XXXX` e `(DD) XXXXX-XXXX`; rejeita código do país, pontuação arbitrária e espaços externos |
 | `equals(other, [msg])` | Valor deve ser igual a `other` — útil para confirmação de senha |
-| `type<T>([msg])` | `String` e tipos customizados usam `is T`; `int`, `double` e `bool` também aceitam strings convertíveis por compatibilidade |
+| `type<T>([msg])` | Verifica estritamente `value is T`; não converte strings |
 | `isDate([msg])` | Data válida — aceita `dd/MM/yyyy`, `yyyy-MM-dd` e ISO 8601 |
 | `isBefore(max, [msg])` | Data anterior a `max` |
 | `isAfter(min, [msg])` | Data posterior a `min` |

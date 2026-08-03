@@ -56,24 +56,10 @@ bool isEquals(dynamic value, dynamic other) {
   return value?.toString() == other?.toString();
 }
 
-/// Retorna `true` se [value] é do tipo [T].
-bool isType<T>(dynamic value) {
-  if (T == String) return value is String;
-  if (T == int) {
-    if (value is int) return true;
-    return int.tryParse(value?.toString() ?? '') != null;
-  }
-  if (T == double) {
-    if (value is double) return true;
-    return double.tryParse(value?.toString() ?? '') != null;
-  }
-  if (T == bool) {
-    if (value is bool) return true;
-    final s = value?.toString().toLowerCase();
-    return s == 'true' || s == 'false';
-  }
-  return value is T;
-}
+/// Retorna `true` somente quando [value] já é uma instância de [T].
+///
+/// O valor não é convertido; por exemplo, `'10'` não é um `int`.
+bool isType<T>(dynamic value) => value is T;
 
 /// Retorna `true` se [value] pode ser interpretado como uma data válida.
 ///

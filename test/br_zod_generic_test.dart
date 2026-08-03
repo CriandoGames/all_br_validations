@@ -70,11 +70,11 @@ void main() {
     test('String', () => expect(g.isType<String>('hello'), isTrue));
     test('não String', () => expect(g.isType<String>(42), isFalse));
     test('int literal', () => expect(g.isType<int>(10), isTrue));
-    test('int parseable string', () => expect(g.isType<int>('10'), isTrue));
+    test('int parseable string', () => expect(g.isType<int>('10'), isFalse));
     test('int string inválida', () => expect(g.isType<int>('abc'), isFalse));
     test('double literal', () => expect(g.isType<double>(3.14), isTrue));
     test('bool literal', () => expect(g.isType<bool>(true), isTrue));
-    test('bool string "true"', () => expect(g.isType<bool>('true'), isTrue));
+    test('bool string "true"', () => expect(g.isType<bool>('true'), isFalse));
     test(
         'bool string inválida', () => expect(g.isType<bool>('maybe'), isFalse));
   });
@@ -184,8 +184,9 @@ void main() {
       expect(v('01/01/2025'), isNotNull);
     });
 
-    test('type<int> — valor inteiro', () {
-      expect(BrZod().required().type<int>().build('42'), isNull);
+    test('type<int> — verifica o tipo sem coerção', () {
+      expect(BrZod().required().type<int>().build(42), isNull);
+      expect(BrZod().required().type<int>().build('42'), isNotNull);
       expect(BrZod().required().type<int>().build('abc'), isNotNull);
     });
 

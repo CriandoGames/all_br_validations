@@ -236,6 +236,7 @@ it does not prove identity, ownership, or official document existence.
 
 ## Documentation
 
-See [doc/en](doc/en), the [contributing guide](CONTRIBUTING.en.md), and the
+See [doc/en](doc/en), the [migration guide](doc/en/migration.md), the
+[contributing guide](CONTRIBUTING.en.md), and the
 [security policy](SECURITY.en.md). Do not use real personal documents in
 issues, examples, or tests. Licensed under [MIT](LICENSE).

@@ -33,7 +33,7 @@ abstract interface class ILocaleBrZod {
   /// Mensagem para data inexistente ou em formato não aceito.
   String get invalidDate;
 
-  /// Mensagem para valor de tipo ou coerção incompatível.
+  /// Mensagem para valor de tipo incompatível.
   String get invalidType;
 
   /// Mensagem para texto menor que [n] caracteres.

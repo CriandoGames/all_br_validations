@@ -126,11 +126,9 @@ class BrZod {
         (v) => g.isEquals(v, other) ? null : message ?? _l.equals,
       );
 
-  /// Valor deve ser do tipo [T] ou ser convertível para um tipo básico.
+  /// Valor deve ser uma instância do tipo [T].
   ///
-  /// Para `int`, `double` e `bool`, strings convertíveis são aceitas por
-  /// compatibilidade histórica (por exemplo, `'123'` para `int`). `String`
-  /// e tipos personalizados usam verificação estrita com `is T`.
+  /// Não realiza coerção: por exemplo, `'123'` é rejeitado por `type<int>()`.
   /// ```dart
   /// BrZod().required().type<int>().build
   /// ```

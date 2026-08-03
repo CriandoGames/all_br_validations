@@ -57,7 +57,7 @@ considered present and can be checked with `type<T>` or `custom`.
 | `email([message])` | canonical package email rule |
 | `phone([message])` | Brazilian 8/9-digit subscriber or 10/11-digit DDD number |
 | `equals(other, [message])` | values compare equal after string conversion |
-| `type<T>([message])` | String/int/double/bool conversion rules, otherwise Dart `is T` |
+| `type<T>([message])` | strict Dart `value is T`; no string conversion |
 | `custom(callback, {message})` | arbitrary boolean callback |
 | `isDate([message])` | `dd/MM/yyyy`, `yyyy-MM-dd`, or parseable ISO 8601 form |
 | `isBefore(max, [message])` | parsed date strictly before max |

@@ -35,14 +35,14 @@ void main() {
     });
   });
 
-  group('type<T> preserva coerção histórica documentada', () {
-    test('mantém valores e strings convertíveis', () {
+  group('type<T> faz verificação estrita de tipo', () {
+    test('aceita instâncias e rejeita strings convertíveis', () {
       expect(generic.isType<int>(123), isTrue);
-      expect(BrZod().type<int>().build('123'), isNull);
+      expect(BrZod().type<int>().build('123'), isNotNull);
       expect(generic.isType<double>(1.5), isTrue);
-      expect(BrZod().type<double>().build('1.5'), isNull);
+      expect(BrZod().type<double>().build('1.5'), isNotNull);
       expect(generic.isType<bool>(true), isTrue);
-      expect(BrZod().type<bool>().build('true'), isNull);
+      expect(BrZod().type<bool>().build('true'), isNotNull);
       expect(BrZod().type<String>().build('abc'), isNull);
     });
   });

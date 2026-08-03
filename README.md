@@ -236,6 +236,7 @@ um documento. Máscaras baseadas em `TextInputFormatter` ficam no pacote
 
 ## Documentação
 
-Consulte [doc/pt-BR](doc/pt-BR), o [guia de contribuição](CONTRIBUTING.md) e a
+Consulte [doc/pt-BR](doc/pt-BR), o [guia de migração](doc/pt-BR/migration.md),
+o [guia de contribuição](CONTRIBUTING.md) e a
 [política de segurança](SECURITY.md). Não use documentos pessoais reais em
 issues, exemplos ou testes. Licença [MIT](LICENSE).
